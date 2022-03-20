@@ -9,9 +9,6 @@ import (
 	"strings"
 )
 
-type Config struct {
-}
-
 // Package provide many formats
 const (
 	// Count starts from 1 to make FormatMap check easier. Map returns 0 whether it has not required format
@@ -69,19 +66,19 @@ func ReadConfig(filename string, format int) (Config, error) {
 	case YAML:
 		err = yaml.Unmarshal(data, &conf)
 		if err != nil {
-			return conf, err
+			return conf, fmt.Errorf("yaml parsing: %w", err)
 		}
 
 	case JSON:
 		err = json.Unmarshal(data, &conf)
 		if err != nil {
-			return conf, err
+			return conf, fmt.Errorf("json parsing: %w", err)
 		}
 
 	case TOML:
 		err = toml.Unmarshal(data, &conf)
 		if err != nil {
-			return conf, err
+			return conf, fmt.Errorf("toml parsing: %w", err)
 		}
 	}
 

@@ -1,0 +1,25 @@
+header {
+
+}
+
+header a {
+    font-family: 'Inconsolata', monospace;
+
+    color: white;
+    text-decoration: none;
+    position: relative;
+    top: 18px;
+    left: 10px;
+}
+
+header .center {
+    margin-top: 0;
+    display: flex;
+    justify-content: center;
+}
+
+header img {
+    padding-top: 30px;
+    width: 60px;
+    height: 60px;
+}

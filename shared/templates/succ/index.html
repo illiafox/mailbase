@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/header/style.css">
+
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="#000000FF">
+    <title>Title</title>
+</head>
+
+<style>
+    body {
+        background-color: black;
+    }
+
+
+
+    .parallelogram {
+        border-radius: 2px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 60%;
+        transform: skew(-20deg);
+        background: white;
+        position: relative;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<body>
+
+<header>
+    <div class="center">
+        <img src="/images/logo.jpg" alt="logo"/>
+        <h1><a href="/">Fort Studio</a></h1>
+    </div>
+</header>
+
+<div class="parallelogram" style="margin-top: 100px">
+    <div style="transform: skew(20deg);">
+        <p style="font-family: 'Roboto Mono', monospace; font-size: 180%">Successful!</p>
+        <p style="font-family: 'Roboto Mono', monospace; font-size: 200%">{{.}}</p>
+    </div>
+</div>
+
+</body>
+</html>

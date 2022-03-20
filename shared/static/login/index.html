@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="login.css">
+    <script src="login.js"></script>
+    <script src="/js/common/showpass.js"></script>
+    <title>Registration</title>
+</head>
+
+
+<body style="background-color: black">
+
+
+<div style="color:white;   font-family: 'Inconsolata', monospace;">
+    <form method="post" action="/api/login" id="loginform" style=" margin-bottom: 0px">
+        <h1>Login</h1>
+        <p><strong>Dont have account yet?</strong> <a href="/register"> Register</a></p>
+
+        <input type="email" name="mail" placeholder="example@fort.com" class="input" required><br><br>
+        <input type="password" name="password" id="pass_input" placeholder="Pass: 8-128 characters" class="input"
+               required><br>
+        <p class="warn" id="check_password" style="margin-top: 10px"></p>
+        <label>
+            <p style="font-size: 120%;  margin-bottom: 0">
+                <input type="checkbox" onclick="ShowHidePass(`pass_input`)" style="margin-top: 10px; "> Show Password
+            </p>
+        </label>
+    </form>
+    <div class="button">
+        <button onclick="postForm()" class="button" value="Set Up Account">Login
+        </button>
+    </div>
+</div>
+</body>
+
+</html>

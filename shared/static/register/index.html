@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="register.css">
+        <script src="reg.js"></script>
+        <script src="/js/common/showpass.js"></script>
+        <title>Registration</title>
+    </head>
+
+
+    <body style="background-color: black">
+
+
+<div style="color:white;   font-family: 'Inconsolata', monospace;">
+    <form method="post" action="/api/register" id="regform">
+        <h1>Registration</h1>
+        <p><strong>Has account already been created?</strong><a href="/login"> Login</a></p>
+
+        <input type="email" name="mail" placeholder="example@fort.com" class="input" required><br><br>
+        <input type="password" name="password" id="pass_input" placeholder="Pass: 8-128 characters" class="input" required><br>
+        <p class="warn" id="check_password" style="margin-top: 10px"></p>
+            <label>
+                <p style="font-size: 120%; margin-top: 0">
+                    <input type="checkbox" onclick="ShowHidePass(`pass_input`)" style="margin-top: 10px; "> Show Password </p>
+            </label>
+        <input type="password" name="retype_password" placeholder="Retype password" class="input"><br>
+        <p class="warn" id="check_retype" style="margin-top: 10px;"></p>
+        <label >
+            <input type="checkbox"style="margin-top: 10px; margin-bottom: 0;" required>By signing up, you agree to our
+            <a href="#service">Terms of Service</a> and <a href="#policy">Privacy Policy</a>
+        </label>
+        <br>
+    </form>
+    <div class="button">
+        <button onclick="postForm()" class="button" value="Set Up Account" style="margin-top: 5px">Set Up Account</button>
+    </div>
+</div>
+    </body>
+
+</html>
