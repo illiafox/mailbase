@@ -8,8 +8,11 @@
 
 # Running
 Config parser supports small variety of formats (you can implement new)
+
 `go run . -conf conf.toml -type toml`
+
 `go run . -conf conf.json -type json`
+
 `go run . -conf conf.yaml -type yaml`
 
 # Screenshots 
