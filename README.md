@@ -1,4 +1,7 @@
 # mailbase
+
+[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/illiafox/mailbase.svg)](https://go.dev/learn/)
+
 ## simple login/register server with mail checking using go and mysql
  note: readme is poor, wait for better version
 
