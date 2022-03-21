@@ -86,7 +86,6 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashedPass := sha256.Sum256([]byte(Password))
 	key := uuid.NewString()
 
 	var buf bytes.Buffer
@@ -104,6 +103,7 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	hashedPass := sha256.Sum256([]byte(Password))
 	err = db.Redis.NewBuf(model.Users{
 		Email:    Mail,
 		Password: hex.EncodeToString(hashedPass[:]),

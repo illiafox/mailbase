@@ -60,7 +60,11 @@ func main() {
 		}
 	}()
 
-	db.MySQL.ClearSessions(7)
+	err = db.MySQL.ClearSessions(7)
+	if err != nil {
+		fmt.Println("Clearing sessions: ", err)
+		return
+	}
 
 	// // Handling
 	go server.Init(db, conf)
