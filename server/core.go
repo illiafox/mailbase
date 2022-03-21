@@ -7,9 +7,10 @@ import (
 	siteCore "mailbase/server/handlers/site"
 	"mailbase/util/config"
 	"net/http"
+	"os"
 )
 
-func Init(conn *database.Database, conf config.Config) {
+func Init(conn *database.Database, conf config.Config, c chan os.Signal) {
 
 	rootHandler := http.NewServeMux()
 
@@ -22,6 +23,7 @@ func Init(conn *database.Database, conf config.Config) {
 	log.Println("Host started at 127.0.0.1:" + conf.Host.Port)
 
 	err := http.ListenAndServe(":"+conf.Host.Port, rootHandler)
+	log.Println(err)
 
-	log.Fatalln(err)
+	c <- os.Interrupt
 }

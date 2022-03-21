@@ -60,17 +60,19 @@ func main() {
 		}
 	}()
 
+	// Clear old sessions
 	err = db.MySQL.ClearSessions(7)
 	if err != nil {
 		fmt.Println("Clearing sessions: ", err)
 		return
 	}
 
+	sig := make(chan os.Signal)
+
 	// // Handling
-	go server.Init(db, conf)
+	go server.Init(db, conf, sig)
 
 	// Catch interrupt
-	sig := make(chan os.Signal)
 	signal.Notify(sig, os.Interrupt)
 	<-sig
 }

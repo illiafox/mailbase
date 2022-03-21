@@ -84,10 +84,13 @@ func NewDatabase(conf config.Config) (*Database, error) {
 	}
 
 	return &Database{
+		// // Redis
 		Redis: redis.Redis{
 			Client: rdb,
 			Expire: time.Duration(conf.Redis.ExpireSeconds) * time.Second,
 		},
+
+		// // Mysql
 		MySQL: sqlDB,
 
 		// // Mail
