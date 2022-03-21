@@ -33,7 +33,7 @@ go run . -conf conf.yaml -type yaml
 # Mail link
 In [mail/index.html](https://github.com/illiafox/mailbase/blob/9157a8c3b058879b87655a4b2e1bc7ef31c03234/shared/templates/mail/index.html#L18) (line marked) you ought to change mail message link
 
-For instance, default url is `https://localhost:8080/api/verify?key=`.  With unique site it will look like `https://yoursite.com/api/verify?key=`
+For instance, default url is `https://localhost:8080/api/verify?key=`.  With unique site it would look like `https://yoursite.com/api/verify?key=`
 
 
 # Site map
