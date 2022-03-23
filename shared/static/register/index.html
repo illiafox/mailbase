@@ -18,6 +18,7 @@
         <p><strong>Has account already been created?</strong><a href="/login"> Login</a></p>
 
         <input type="email" name="mail" placeholder="example@fort.com" class="input" required><br><br>
+        <p class="warn" id="check_mail"></p>
         <input type="password" name="password" id="pass_input" placeholder="Pass: 8-128 characters" class="input" required><br>
         <p class="warn" id="check_password" style="margin-top: 10px"></p>
             <label>
@@ -33,7 +34,7 @@
         <br>
     </form>
     <div class="button">
-        <button onclick="postForm()" class="button" value="Set Up Account" style="margin-top: 5px">Set Up Account</button>
+        <button onclick="postForm('regform')" class="button" value="Set Up Account" style="margin-top: 5px">Set Up Account</button>
     </div>
 </div>
     </body>

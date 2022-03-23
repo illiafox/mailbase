@@ -18,6 +18,8 @@ func Handler(db *database.Database) http.Handler {
 
 	rootHandler.Handle("/register/", StaticHandler)
 	rootHandler.Handle("/login/", StaticHandler)
+	rootHandler.Handle("/forgot/", StaticHandler)
+
 	rootHandler.HandleFunc("/", db.Wrap(methods.Main))
 
 	return rootHandler

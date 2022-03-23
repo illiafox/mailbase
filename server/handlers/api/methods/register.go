@@ -11,9 +11,9 @@ import (
 	"mailbase/database/mysql/model"
 	"mailbase/shared/public"
 	"mailbase/shared/templates"
+	"mailbase/validator"
 	"net/http"
 	"net/mail"
-	"unicode"
 )
 
 func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
@@ -40,38 +40,15 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Mail check
+	// MailVerify check
 	_, err = mail.ParseAddress(Mail)
 	if err != nil {
 		templates.Error.WriteAnyCode(w, http.StatusForbidden, "Wrong mail format!\nExample: fortstudio8@gmail.com")
 		return
 	}
 
-	// Password check Why not regexp? Because re2 does not support lookaheads '?= '
-	count, low, up, num := 0, false, false, false
-	for _, s := range Password {
-		if !unicode.IsLetter(s) && !unicode.IsNumber(s) {
-			templates.Error.WriteAnyCode(w, http.StatusForbidden, "Invalid password format: Only numbers/letters are allowed")
-			return
-		}
-		switch {
-		case unicode.IsLower(s):
-			low = true
-		case unicode.IsUpper(s):
-			up = true
-		case unicode.IsNumber(s):
-			num = true
-		}
-		count++
-	}
-
-	if public.Register.PasswordMin > count || count > public.Register.PasswordMax {
-		templates.Error.WriteAnyCode(w, http.StatusForbidden, public.Register.InvalidLength)
-		return
-	}
-
-	if !(low && up && num) {
-		templates.Error.WriteAnyCode(w, http.StatusForbidden, public.Register.InvalidFormat)
+	validator.Password(w, r, Password)
+	if r.Close {
 		return
 	}
 
@@ -89,7 +66,7 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	key := uuid.NewString()
 
 	var buf bytes.Buffer
-	err = templates.Mail.WriteBytes(&buf, key)
+	err = templates.MailVerify.WriteBytes(&buf, key)
 	if err != nil {
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
 		log.Println(fmt.Errorf("API: register: create message with key: %w", err))
@@ -104,7 +81,7 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	}
 
 	hashedPass := sha256.Sum256([]byte(Password))
-	err = db.Redis.NewBuf(model.Users{
+	err = db.Redis.NewVerifyUser(model.Users{
 		Email:    Mail,
 		Password: hex.EncodeToString(hashedPass[:]),
 	}, key)

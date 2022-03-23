@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="login.css">
     <script src="login.js"></script>
     <script src="/js/common/showpass.js"></script>
-    <title>Registration</title>
+    <title>Login</title>
 </head>
 
 
@@ -18,17 +18,21 @@
         <p><strong>Dont have account yet?</strong> <a href="/register"> Register</a></p>
 
         <input type="email" name="mail" placeholder="example@fort.com" class="input" required><br><br>
+        <p class="warn" id="check_mail"></p>
         <input type="password" name="password" id="pass_input" placeholder="Pass: 8-128 characters" class="input"
                required><br>
         <p class="warn" id="check_password" style="margin-top: 10px"></p>
         <label>
             <p style="font-size: 120%;  margin-bottom: 0">
-                <input type="checkbox" onclick="ShowHidePass(`pass_input`)" style="margin-top: 10px; "> Show Password
+                <input type="checkbox" onclick="ShowHidePass(`pass_input`)" style="margin-top: 10px; "> Show
+
+            <a href="/forgot">Forgot Password</a>
             </p>
         </label>
+
     </form>
     <div class="button">
-        <button onclick="postForm()" class="button" value="Set Up Account">Login
+        <button onclick="postForm('loginform')" class="button" value="Login">Login
         </button>
     </div>
 </div>

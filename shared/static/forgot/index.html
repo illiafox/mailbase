@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="forgot.css">
+    <script src="forgot.js"></script>
+    <title>Forgot password?</title>
+</head>
+
+
+<body style="background-color: black">
+
+
+<div style="color:white;   font-family: 'Inconsolata', monospace;">
+    <form method="post" action="/api/forgot" id="loginform" style=" margin-bottom: 0">
+        <h1>Forgot password?</h1>
+
+        <input type="email" name="mail" placeholder="example@fort.com" class="input" required><br><br>
+        <p class="warn" id="check_mail"></p>
+        <p style="margin-top:0"><strong>Remembered?</strong> <a href="/login"> Login</a></p>
+    </form>
+    <div class="button">
+        <button onclick="postForm('loginform')" class="button" value="Reset Password">Reset
+        </button>
+    </div>
+</div>
+</body>
+
+</html>

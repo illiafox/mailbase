@@ -61,10 +61,15 @@ func (db *MySQL) ClearSessions(days int) error {
 	return nil
 }
 
-func (db *MySQL) DeleteSession(key string) error {
+func (db *MySQL) DeleteSessionByKey(key string) error {
 	err := db.Client.Delete(&model.Sessions{Key: key}).Error
 	if err != nil {
 		return public.NewInternalWithError(err)
 	}
 	return nil
+}
+
+// DeleteSessionByUserId Can be only internal
+func (db *MySQL) DeleteSessionByUserId(id int) error {
+	return db.Client.Delete(&model.Sessions{}, "user_id = ?", id).Error
 }

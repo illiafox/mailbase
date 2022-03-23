@@ -44,7 +44,6 @@ func main() {
 		fmt.Println("New Database: ", err)
 		return
 	}
-
 	// If you have better solution, please suggest it in the issue or contact me https://t.me/ebashu_gerych
 	defer func() {
 		ok := true

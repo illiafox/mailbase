@@ -1,0 +1,79 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    text-align: center;
+}
+* {
+    box-sizing: border-box;
+}
+
+.content {
+    flex: 1 0 auto; 
+    padding: 20px;
+}
+
+input, button {
+    /* border-radius: 5px; округление краев, мне не по нраву*/
+    padding: 10px;
+}
+.warn {
+    font-weight: bold;
+    color: orangered;
+    display: none;
+    margin-top:  0;
+}
+
+a {
+    text-decoration: none;
+    color: #e51;
+}
+
+form {
+    margin: 0 auto;
+    width: 75%;
+}
+
+.input {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 20px;
+    border: 1px solid transparent;
+    background-color: rgb(228, 228, 228);
+}
+
+button {
+    box-sizing: border-box;
+    color: #222222;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    line-height: 20px;
+    margin: 0;
+    padding: 13px 23px;
+    position: relative;
+    text-align: center;
+    touch-action: manipulation;
+    width: auto;
+    transition-timing-function: ease-in-out;
+}
+button:hover {
+   color: green;
+    transition: all .3s;
+}
+
+
+@media screen and (max-width: 500px) {
+    .header a {
+    float: none;
+    display: block;
+    text-align: left;
+}
+    .header-right {
+      float: none;
+    }
+}

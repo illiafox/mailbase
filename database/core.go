@@ -9,6 +9,7 @@ import (
 	"mailbase/database/mysql"
 	"mailbase/database/redis"
 	"mailbase/mail"
+	"mailbase/shared/public"
 	"mailbase/util/config"
 	"net/http"
 	"time"
@@ -87,7 +88,7 @@ func NewDatabase(conf config.Config) (*Database, error) {
 		// // Redis
 		Redis: redis.Redis{
 			Client: rdb,
-			Expire: time.Duration(conf.Redis.ExpireSeconds) * time.Second,
+			Expire: time.Duration(public.Redis.ExpireSeconds) * time.Second,
 		},
 
 		// // Mysql

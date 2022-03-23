@@ -10,11 +10,14 @@ import (
 )
 
 // Package provide many formats
+
+type Format int
+
 const (
 	// Count starts from 1 to make FormatMap check easier. Map returns 0 whether it has not required format
 	// Example:
 	//	if f := FormatMap["json"]; f == 0 { return error }
-	_ = iota
+	_ = Format(iota)
 
 	// JSON https://pkg.go.dev/encoding/json
 	JSON
@@ -28,7 +31,7 @@ const (
 
 // FormatMap is a map implementation of all formats
 // Can be used with flag package
-var FormatMap = map[string]int{
+var FormatMap = map[string]Format{
 	"json": JSON,
 	"toml": TOML,
 	"yaml": YAML,
@@ -50,7 +53,7 @@ var Available = func() string {
 // ReadConfig reads and parses config using available formats (JSON, TOML, YAML)
 // Example:
 //	config.ReadConfig("config.json",config.JSON)
-func ReadConfig(filename string, format int) (Config, error) {
+func ReadConfig(filename string, format Format) (Config, error) {
 	var conf Config
 
 	data, err := ioutil.ReadFile(filename)

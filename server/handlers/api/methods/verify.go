@@ -16,7 +16,7 @@ func Verify(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := db.Redis.GetBuf(key)
+	user, err := db.Redis.GetVerifyUser(key)
 	if err != nil {
 		if internal, ok := err.(public.InternalWithError); ok {
 			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)

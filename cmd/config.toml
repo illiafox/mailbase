@@ -16,7 +16,7 @@ ExpireSeconds = 300
 Port = "8080"
 
 [Smtp]
-Mail = "fortstudio8@gmail.com"
+MailVerify = "fortstudio8@gmail.com"
 Password = "12345678"
 Hostname = "smtp.gmail.com"
 Port = 587

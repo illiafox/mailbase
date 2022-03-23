@@ -5,7 +5,7 @@ import "errors"
 var Login = login{
 	MailExist:         errors.New("email Already Exists"),
 	LoginNotFound:     errors.New("login Not Found"),
-	IncorrectPassword: errors.New("incorrect password"), // TODO: Add recover password feature
+	IncorrectPassword: errors.New("incorrect password"),
 }
 
 type login struct {

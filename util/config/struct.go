@@ -10,10 +10,9 @@ type MySQL struct {
 }
 
 type Redis struct {
-	Addr          string
-	Pass          string // Optional
-	DB            int
-	ExpireSeconds int
+	Addr string
+	Pass string // Optional
+	DB   int
 }
 
 type Email struct {
