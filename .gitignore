@@ -3,3 +3,4 @@ cmd/redis.sh
 cmd/dump.rdb
 .idea
 .github
+/cmd/log.txt

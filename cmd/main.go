@@ -7,6 +7,7 @@ import (
 	"mailbase/database"
 	"mailbase/server"
 	"mailbase/util/config"
+	"mailbase/util/multiwriter"
 	"os"
 	"os/signal"
 	"runtime/debug"
@@ -14,6 +15,14 @@ import (
 
 func main() {
 	defer debug.FreeOSMemory()
+
+	// // Log
+	file, err := os.Create("log.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	log.SetOutput(multiwriter.NewMultiWriter(file, os.Stderr))
 
 	// // Flags
 	configPath := flag.String("conf", "config.json", "config file location\nEx: -conf my_conf.json")
@@ -44,6 +53,7 @@ func main() {
 		fmt.Println("New Database: ", err)
 		return
 	}
+
 	// If you have better solution, please suggest it in the issue or contact me https://t.me/ebashu_gerych
 	defer func() {
 		ok := true
@@ -62,7 +72,7 @@ func main() {
 	// Clear old sessions
 	err = db.MySQL.ClearSessions(7)
 	if err != nil {
-		fmt.Println("Clearing sessions: ", err)
+		log.Println("Clearing sessions: ", err)
 		return
 	}
 

@@ -21,7 +21,7 @@ func Main(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if internal, ok := err.(public.InternalWithError); ok {
 			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
-			log.Println(fmt.Errorf("Site: mainpage: mysql: verifysession: %w", internal))
+			log.Println(fmt.Errorf("SITE: mainpage: mysql: verifysession: %w", internal))
 		} else {
 			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
 		}
