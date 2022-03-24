@@ -84,12 +84,16 @@ func Reset(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 		err = db.MySQL.ResetPass(id, hex.EncodeToString(hashedPass[:]))
 		if err != nil {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
-			log.Println(fmt.Errorf("API: reset: POST: mysql: Update Password: %w", err))
-		} else {
-			templates.Successful.WriteAny(w, "Password had been updated<br> Please, <a href='/login'>Login</a>")
+			if internal, ok := err.(public.InternalWithError); ok {
+				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+				log.Println(fmt.Errorf("API: reset: POST: mysql: Update Password: %w", internal))
+			} else {
+				templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
+			}
+			return
 		}
-		// //
+
+		templates.Successful.WriteAny(w, "Password had been updated<br> Please, <a href='/login'>Login</a>")
 	}
 
 }

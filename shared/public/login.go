@@ -4,12 +4,12 @@ import "errors"
 
 var Login = login{
 	MailExist:         errors.New("email Already Exists"),
-	LoginNotFound:     errors.New("login Not Found"),
+	MailNotFound:      errors.New("mail Not Found"),
 	IncorrectPassword: errors.New("incorrect password"),
 }
 
 type login struct {
 	MailExist         error
-	LoginNotFound     error
+	MailNotFound      error
 	IncorrectPassword error
 }

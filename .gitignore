@@ -1,3 +1,5 @@
 cmd/illia.toml
+cmd/redis.sh
+cmd/dump.rdb
 .idea
 .github
