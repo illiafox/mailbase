@@ -44,13 +44,13 @@ func main() {
 	// // Parsing config
 	conf, err := config.ReadConfig(*configPath, format)
 	if err != nil {
-		fmt.Println("Parsing config: ", err)
+		log.Fatalln("Parsing config: ", err)
 		return
 	}
 
 	db, err := database.NewDatabase(conf)
 	if err != nil {
-		fmt.Println("New Database: ", err)
+		log.Fatalln("New Database: ", err)
 		return
 	}
 
@@ -82,6 +82,6 @@ func main() {
 	go server.Init(db, conf, sig)
 
 	// Catch interrupt
-	signal.Notify(sig, os.Interrupt)
+	signal.Notify(sig, os.Interrupt, os.Kill)
 	<-sig
 }
