@@ -10,5 +10,4 @@ RUN go build -o server
 
 EXPOSE 8080
 
-CMD ./server
-# CMD ./server -conf illia.conf
+CMD ./server $ARGUMENTS
