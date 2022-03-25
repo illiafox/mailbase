@@ -11,7 +11,10 @@ func Handler(db *database.Database) http.Handler {
 
 	rootHandler.HandleFunc("/register", db.Wrap(methods.Reg))
 	rootHandler.HandleFunc("/verify", db.Wrap(methods.Verify))
+
 	rootHandler.HandleFunc("/login", db.Wrap(methods.Login))
+	rootHandler.HandleFunc("/logout", db.Wrap(methods.Logout))
+
 	rootHandler.HandleFunc("/forgot", db.Wrap(methods.Forgot))
 	rootHandler.HandleFunc("/reset", db.Wrap(methods.Reset))
 

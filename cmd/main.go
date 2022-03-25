@@ -21,7 +21,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
 	log.SetOutput(multiwriter.NewMultiWriter(file, os.Stderr))
 
 	// // Flags

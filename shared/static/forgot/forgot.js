@@ -13,3 +13,8 @@ function postForm(id) {
     }
 }
 
+function redirect() {
+
+}
+
+
