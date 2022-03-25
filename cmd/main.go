@@ -25,7 +25,7 @@ func main() {
 	log.SetOutput(multiwriter.NewMultiWriter(file, os.Stderr))
 
 	// // Flags
-	configPath := flag.String("conf", "config.json", "config file location\nEx: -conf my_conf.json")
+	configPath := flag.String("conf", "config.toml", "config file location\nEx: -conf my_conf.json")
 
 	format := config.TOML
 
