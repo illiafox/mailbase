@@ -51,7 +51,7 @@ func Forgot(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	key := uuid.NewString()
 
 	var buf bytes.Buffer
-	err = templates.MailResetPass.WriteBytes(&buf, key)
+	err = templates.Mail.ResetPass.WriteBytes(&buf, key)
 	if err != nil {
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
 		log.Println(fmt.Errorf("API: forgot: create message with key: %w", err))

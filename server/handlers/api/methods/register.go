@@ -66,7 +66,7 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	key := uuid.NewString()
 
 	var buf bytes.Buffer
-	err = templates.MailVerify.WriteBytes(&buf, key)
+	err = templates.Mail.Verify.WriteBytes(&buf, key)
 	if err != nil {
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
 		log.Println(fmt.Errorf("API: register: create message with key: %w", err))
