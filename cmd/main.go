@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"github.com/illiafox/mailbase/database"
@@ -11,6 +12,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime/debug"
+	"syscall"
 )
 
 func main() {
@@ -43,18 +45,34 @@ func main() {
 	// // Parsing config
 	conf, err := config.ReadConfig(*configPath, format)
 	if err != nil {
-		log.Fatalln("Parsing config: ", err)
+		log.Fatalln("Parsing config:", err)
 		return
 	}
 
 	db, err := database.NewDatabase(conf)
 	if err != nil {
-		log.Fatalln("New Database: ", err)
+		log.Fatalln("New Database:", err)
 		return
 	}
 
+	// Clear old sessions
+	err = db.MySQL.ClearSessions(7)
+	if err != nil {
+		log.Println("Clearing sessions:", err)
+		return
+	}
+
+	serv := server.Init(db, conf)
+
+	sig := make(chan os.Signal)
+
 	// If you have better solution, please suggest it in the issue or contact me https://t.me/ebashu_gerych
 	defer func() {
+		close(sig)
+		err = serv.Shutdown(context.Background())
+		if err != nil {
+			log.Println(fmt.Errorf("shutdown: server: %w", err))
+		}
 		ok := true
 		for _, err = range db.Close() {
 			if err != nil {
@@ -63,24 +81,25 @@ func main() {
 			}
 		}
 		if ok {
-			fmt.Println()
 			log.Println("Database has closed successfully")
 		}
 	}()
 
-	// Clear old sessions
-	err = db.MySQL.ClearSessions(7)
-	if err != nil {
-		log.Println("Clearing sessions: ", err)
-		return
-	}
+	log.Printf("Server started at 127.0.0.1:" + conf.Host.Port)
 
-	sig := make(chan os.Signal)
-
-	// // Handling
-	go server.Init(db, conf, sig)
+	go func() {
+		err = serv.ListenAndServe()
+		if err != nil {
+			select {
+			case <-sig:
+			default:
+				log.Println(fmt.Errorf("server: unforeseeable stop: %w", err))
+				sig <- os.Interrupt
+			}
+		}
+	}()
 
 	// Catch interrupt
-	signal.Notify(sig, os.Interrupt, os.Kill)
+	signal.Notify(sig, syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGHUP)
 	<-sig
 }

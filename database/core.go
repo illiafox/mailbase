@@ -84,6 +84,12 @@ func NewDatabase(conf config.Config) (*Database, error) {
 		return nil, fmt.Errorf("initializing gorm: %w", err)
 	}
 
+	// // Mail
+	Mail, err := mail.NewMail(conf)
+	if err != nil {
+		return nil, fmt.Errorf("initializing smtp: %w", err)
+	}
+
 	return &Database{
 		// // Redis
 		Redis: redis.Redis{
@@ -95,7 +101,7 @@ func NewDatabase(conf config.Config) (*Database, error) {
 		MySQL: sqlDB,
 
 		// // Mail
-		Mail: mail.NewMail(conf),
+		Mail: Mail,
 	}, nil
 
 }
