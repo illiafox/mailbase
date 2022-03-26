@@ -30,10 +30,12 @@ go run . -conf conf.json -type json
 go run . -conf conf.yaml -type yaml
 ```
 
-# MailVerify link
-In [mail/index.html](https://github.com/illiafox/mailbase/blob/9157a8c3b058879b87655a4b2e1bc7ef31c03234/shared/templates/mail/index.html#L18) (line 18, marked) you ought to change mail message link
+# Mail links
+In [mails](https://github.com/illiafox/mailbase/tree/master/shared/templates/mails) folder you ought to change mail message links
 
-For instance, default url is `https://localhost:8080/api/verify?key=`.  With unique site it would look like `https://yoursite.com/api/verify?key=`
+For instance, default url is `https://localhost:8080/api/verify?key=` 
+
+With unique site it would look like `https://yoursite.com/api/verify?key=`
 
 
 # Site map
@@ -44,7 +46,7 @@ For instance, default url is `https://localhost:8080/api/verify?key=`.  With uni
 
 `/login` login page
 
-`api/logout` logout page
+`/api/logout` logout page
 
 `/api/register` parses register form
 
@@ -54,7 +56,7 @@ For instance, default url is `https://localhost:8080/api/verify?key=`.  With uni
 
 `/api/forgot` sends mail with recover password link
 
-`api/reset` recover form
+`/api/reset` recover form
 
 # Docker
 
