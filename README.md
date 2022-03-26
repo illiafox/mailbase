@@ -4,7 +4,7 @@
 [![Go](https://github.com/illiafox/mailbase/actions/workflows/go.yml/badge.svg)](https://github.com/illiafox/mailbase/actions/workflows/go.yml)
 [![GoReportCard example](https://goreportcard.com/badge/github.com/illiafox/mailbase)](https://goreportcard.com/report/github.com/illiafox/mailbase)
 
-## simple login/register server with mail checking using go, redis and mysql
+## login/register/logout/delete server with mail checking using go, redis and mysql
 
 
 
@@ -12,7 +12,7 @@
 
 * **redis-server:** `6.2.0` (with `GetDel` support)
 * **Mysql:** `8.0.28` (don't know accurate version, so use my as definitive)
-* **Go:** `1.18` (also you can rename `any` `interface{}` to run project on `1.17`, lower haven't been tested)
+* **Go:** `1.18`
 * **packages:** `reffered to go.mod`
 
 # Running
@@ -44,19 +44,20 @@ For instance, default url is `https://localhost:8080/api/verify?key=`.  With uni
 
 `/login` login page
 
+`api/logout` logout page
+
 `/api/register` parses register form
 
 `/api/login` parses login form
 
 `/api/verify` verifies key, which is sent in email message
 
+`/api/forgot` sends mail with recover password link
 
-# Screenshots 
+`api/reset` recover form
 
-![Screenshot from 2022-03-20 21-43-56](https://user-images.githubusercontent.com/61962654/159179952-01cefdbf-08ca-401a-adf9-5f3a35c13d1c.png)
-![Screenshot from 2022-03-20 21-45-25](https://user-images.githubusercontent.com/61962654/159180004-d8f089b6-e30c-487e-b61b-9d99af345792.png)
-![Screenshot from 2022-03-20 21-45-15](https://user-images.githubusercontent.com/61962654/159180007-edacfd64-bee8-4f49-8b02-b61de7f12501.png)
+# Docker
 
-# Todo
-1. comments and explanations (soon)
-2. password recovery
+Image connects to local databases, `--net=host` is obvious
+
+To add execution arguments use `$ARGS` environment variable
