@@ -1,4 +1,4 @@
-module mailbase
+module github.com/illiafox/mailbase
 
 go 1.18
 

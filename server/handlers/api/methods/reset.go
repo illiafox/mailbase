@@ -4,11 +4,11 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"github.com/illiafox/mailbase/database"
+	"github.com/illiafox/mailbase/shared/public"
+	"github.com/illiafox/mailbase/shared/templates"
+	"github.com/illiafox/mailbase/validator"
 	"log"
-	"mailbase/database"
-	"mailbase/shared/public"
-	"mailbase/shared/templates"
-	"mailbase/validator"
 	"net/http"
 )
 

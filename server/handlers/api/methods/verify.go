@@ -2,10 +2,10 @@ package methods
 
 import (
 	"fmt"
+	"github.com/illiafox/mailbase/database"
+	"github.com/illiafox/mailbase/shared/public"
+	"github.com/illiafox/mailbase/shared/templates"
 	"log"
-	"mailbase/database"
-	"mailbase/shared/public"
-	"mailbase/shared/templates"
 	"net/http"
 )
 

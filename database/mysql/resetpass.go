@@ -1,9 +1,9 @@
 package mysql
 
 import (
+	"github.com/illiafox/mailbase/database/mysql/model"
+	"github.com/illiafox/mailbase/shared/public"
 	"github.com/jinzhu/gorm"
-	"mailbase/database/mysql/model"
-	"mailbase/shared/public"
 )
 
 func (db *MySQL) ResetPass(id int, pass string) error {

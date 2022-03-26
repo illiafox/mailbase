@@ -1,11 +1,11 @@
 package server
 
 import (
+	"github.com/illiafox/mailbase/database"
+	apiCore "github.com/illiafox/mailbase/server/handlers/api"
+	siteCore "github.com/illiafox/mailbase/server/handlers/site"
+	"github.com/illiafox/mailbase/util/config"
 	"log"
-	"mailbase/database"
-	apiCore "mailbase/server/handlers/api"
-	siteCore "mailbase/server/handlers/site"
-	"mailbase/util/config"
 	"net/http"
 	"os"
 )

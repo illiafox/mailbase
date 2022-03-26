@@ -1,8 +1,8 @@
 package mail
 
 import (
+	"github.com/illiafox/mailbase/util/config"
 	"gopkg.in/gomail.v2"
-	"mailbase/util/config"
 )
 
 func NewMail(conf config.Config) Mail {

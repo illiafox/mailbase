@@ -1,8 +1,8 @@
 package mysql
 
 import (
+	"github.com/illiafox/mailbase/database/mysql/model"
 	"github.com/jinzhu/gorm"
-	"mailbase/database/mysql/model"
 )
 
 type MySQL struct {

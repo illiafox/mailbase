@@ -1,8 +1,8 @@
 package site
 
 import (
-	"mailbase/database"
-	"mailbase/server/handlers/site/methods"
+	"github.com/illiafox/mailbase/database"
+	"github.com/illiafox/mailbase/server/handlers/site/methods"
 	"net/http"
 )
 

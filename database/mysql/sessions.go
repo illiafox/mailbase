@@ -5,10 +5,10 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/illiafox/mailbase/database/mysql/model"
+	"github.com/illiafox/mailbase/shared/public"
 	"github.com/jinzhu/gorm"
 	"log"
-	"mailbase/database/mysql/model"
-	"mailbase/shared/public"
 	"time"
 )
 

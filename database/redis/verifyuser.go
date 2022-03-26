@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/go-redis/redis/v8"
-	"mailbase/database/mysql/model"
-	"mailbase/shared/public"
+	"github.com/illiafox/mailbase/database/mysql/model"
+	"github.com/illiafox/mailbase/shared/public"
 )
 
 func (r *Redis) NewVerifyUser(user model.Users, key string) error {

@@ -1,8 +1,8 @@
 package validator
 
 import (
-	"mailbase/shared/public"
-	"mailbase/shared/templates"
+	"github.com/illiafox/mailbase/shared/public"
+	"github.com/illiafox/mailbase/shared/templates"
 	"net/http"
 	"unicode"
 )

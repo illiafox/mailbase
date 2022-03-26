@@ -3,7 +3,7 @@ package redis
 import (
 	"context"
 	"github.com/go-redis/redis/v8"
-	"mailbase/shared/public"
+	"github.com/illiafox/mailbase/shared/public"
 	"strconv"
 )
 

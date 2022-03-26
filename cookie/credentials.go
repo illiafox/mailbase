@@ -1,7 +1,7 @@
 package cookie
 
 import (
-	"mailbase/shared/public"
+	"github.com/illiafox/mailbase/shared/public"
 	"net/http"
 )
 
