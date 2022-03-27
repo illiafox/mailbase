@@ -20,6 +20,7 @@ func NewRedis(client *redis.Client, conf config.Config) Redis {
 	expire := time.Duration(public.Redis.ExpireSeconds) * time.Second
 
 	return Redis{
+		Client: client,
 
 		Forgot: Forgot{
 			Client: client,
