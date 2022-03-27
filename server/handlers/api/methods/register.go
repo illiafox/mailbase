@@ -2,10 +2,9 @@ package methods
 
 import (
 	"bytes"
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"github.com/google/uuid"
+	"github.com/illiafox/mailbase/crypt"
 	"github.com/illiafox/mailbase/database"
 	"github.com/illiafox/mailbase/database/mysql/model"
 	"github.com/illiafox/mailbase/shared/public"
@@ -80,11 +79,18 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashedPass := sha256.Sum256([]byte(Password))
+	hashedPass, err := crypt.HashPassword(Password)
+	if err != nil {
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		log.Println(fmt.Errorf("API: register: hash password: %w", err))
+		return
+	}
+
 	err = db.Redis.Verify.New(model.Users{
 		Email:    Mail,
-		Password: hex.EncodeToString(hashedPass[:]),
+		Password: hashedPass,
 	}, key)
+
 	if err != nil { // can be only internal
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
 		log.Println(fmt.Errorf("API: register: new buf: %w", err))

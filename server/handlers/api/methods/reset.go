@@ -1,9 +1,8 @@
 package methods
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
+	"github.com/illiafox/mailbase/crypt"
 	"github.com/illiafox/mailbase/database"
 	"github.com/illiafox/mailbase/shared/public"
 	"github.com/illiafox/mailbase/shared/templates"
@@ -80,9 +79,14 @@ func Reset(db *database.Database, w http.ResponseWriter, r *http.Request) {
 			log.Println(fmt.Errorf("API: reset: POST: redis: DeleteSessionByUserId: %w", err))
 		}
 
-		hashedPass := sha256.Sum256([]byte(Password))
+		hashedPass, err := crypt.HashPassword(Password)
+		if err != nil {
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+			log.Println(fmt.Errorf("API: reset: hash password: %w", err))
+			return
+		}
 
-		err = db.MySQL.ResetPass(id, hex.EncodeToString(hashedPass[:]))
+		err = db.MySQL.ResetPass(id, hashedPass)
 		if err != nil {
 			if internal, ok := err.(public.InternalWithError); ok {
 				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)

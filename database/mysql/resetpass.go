@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"github.com/illiafox/mailbase/crypt"
 	"github.com/illiafox/mailbase/database/mysql/model"
 	"github.com/illiafox/mailbase/shared/public"
 	"github.com/jinzhu/gorm"
@@ -18,7 +19,7 @@ func (db *MySQL) ResetPass(id int, pass string) error {
 		}
 	}
 
-	if user.Password == pass {
+	if crypt.ComparePassword(user.Password, pass) {
 		return public.Forgot.SamePassword
 	}
 

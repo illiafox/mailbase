@@ -87,9 +87,8 @@ func main() {
 		}
 	}()
 
-	log.Printf("Server started at 127.0.0.1:" + conf.Host.Port)
-
 	go func() {
+		log.Printf("Server started at 127.0.0.1:" + conf.Host.Port)
 		err = serv.ListenAndServe()
 		select {
 		case <-sig:
@@ -100,6 +99,7 @@ func main() {
 	}()
 
 	// Catch interrupt
-	signal.Notify(sig, syscall.SIGTERM, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGHUP)
+	// work not properly
+	signal.Notify(sig, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL, syscall.SIGQUIT, syscall.SIGHUP)
 	<-sig
 }

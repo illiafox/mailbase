@@ -1,11 +1,10 @@
 package methods
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/illiafox/mailbase/cookie"
+	"github.com/illiafox/mailbase/crypt"
 	"github.com/illiafox/mailbase/database"
 	"github.com/illiafox/mailbase/shared/public"
 	"github.com/illiafox/mailbase/shared/templates"
@@ -62,8 +61,7 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hashedPass := sha256.Sum256([]byte(Password))
-	if exist.Password != hex.EncodeToString(hashedPass[:]) {
+	if !crypt.ComparePassword(exist.Password, Password) {
 		templates.Error.WriteAnyCode(w, http.StatusForbidden, public.Login.IncorrectPassword)
 		return
 	}

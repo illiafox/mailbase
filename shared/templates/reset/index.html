@@ -4,6 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Reset</title>
 
+    <script src="/js/common/showpass.js"></script>
+
     <link rel="stylesheet" href="/css/element/links.css">
 
 </head>
@@ -19,6 +21,7 @@
         margin: 0;
         text-align: center;
     }
+
     * {
         box-sizing: border-box;
     }
@@ -32,11 +35,12 @@
         /* border-radius: 5px; округление краев, мне не по нраву*/
         padding: 10px;
     }
+
     .warn {
         font-weight: bold;
         color: orangered;
         display: none;
-        margin-top:  0;
+        margin-top: 0;
     }
 
     form {
@@ -67,6 +71,7 @@
         width: auto;
         transition-timing-function: ease-in-out;
     }
+
     button:hover {
         color: green;
         transition: all .3s;
@@ -79,6 +84,7 @@
             display: block;
             text-align: left;
         }
+
         .header-right {
             float: none;
         }
@@ -89,7 +95,7 @@
     function postForm(id) {
         let form = document.getElementById(id)
         document.getElementById("check_password").style.display = "none";
-          switch (true) {
+        switch (true) {
             // Password
             case !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,128}$/.test(form.elements["password"].value):
                 document.getElementById("check_password").innerHTML = "Wrong Password Format!";
@@ -109,13 +115,14 @@
     <form method="post" action="/api/reset?key={{ . }}" id="resetform" style=" margin-bottom: 0">
         <h1>Reset</h1>
 
-        <input type="text" name="password" id="pass_input" placeholder="Pass: 8-128 characters" class="input"
+        <input type="password" name="password" id="pass_input" placeholder="Pass: 8-128 characters" class="input"
                required><br>
         <p class="warn" id="check_password" style="margin-top: 10px"></p>
-        <p class="warn" id="check_mail"></p>
-        <p ><strong>Remembered?</strong> <a href="/login"> Login</a></p>
+
+        <p><strong>Remembered?</strong> <a href="/login"> Login</a></p>
     </form>
     <div class="button">
+        <input type="checkbox" onclick="ShowHidePass(`pass_input`)" style="margin-top: 10px; "> Show
         <button onclick="postForm('resetform')" class="button" value="Reset Password">Reset
         </button>
     </div>
