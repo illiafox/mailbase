@@ -82,6 +82,8 @@ func main() {
 		}
 		if ok {
 			log.Println("Database has closed successfully")
+		} else {
+			log.Println("Database has closed with errors")
 		}
 	}()
 
@@ -89,13 +91,11 @@ func main() {
 
 	go func() {
 		err = serv.ListenAndServe()
-		if err != nil {
-			select {
-			case <-sig:
-			default:
-				log.Println(fmt.Errorf("server: unforeseeable stop: %w", err))
-				sig <- nil
-			}
+		select {
+		case <-sig:
+		default:
+			log.Println(fmt.Errorf("server: unforeseeable stop: %w", err))
+			sig <- nil
 		}
 	}()
 
