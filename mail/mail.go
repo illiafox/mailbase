@@ -20,7 +20,7 @@ func NewMail(conf config.Config) (Mail, error) {
 
 	err = rc.Close()
 	if err != nil {
-		return Mail{}, fmt.Errorf("closing dial: %w", err)
+		return Mail{}, fmt.Errorf("closing test dial: %w", err)
 	}
 
 	return m, nil

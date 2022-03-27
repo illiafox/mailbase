@@ -94,7 +94,7 @@ func main() {
 			case <-sig:
 			default:
 				log.Println(fmt.Errorf("server: unforeseeable stop: %w", err))
-				sig <- os.Interrupt
+				sig <- nil
 			}
 		}
 	}()
