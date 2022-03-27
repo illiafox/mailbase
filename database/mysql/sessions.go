@@ -1,8 +1,6 @@
 package mysql
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"github.com/illiafox/mailbase/database/mysql/model"
@@ -15,9 +13,8 @@ import (
 // VerifySession key: UUID from cookie, int: user_id
 func (db *MySQL) VerifySession(key string) (int, error) {
 	session := model.Sessions{}
-	hashedPass := sha256.Sum256([]byte(key))
 
-	err := db.Client.First(&session, "`key` = ?", hex.EncodeToString(hashedPass[:])).Error // key в sql распознается как синтаксис, поэтому берем в ` `
+	err := db.Client.First(&session, "`key` = ?", key).Error // key в sql распознается как синтаксис, поэтому берем в ` `
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return -1, public.Session.NoSession
@@ -39,11 +36,10 @@ func (db *MySQL) VerifySession(key string) (int, error) {
 }
 
 func (db *MySQL) InsertSession(userid int, key string) error {
-	hashedPass := sha256.Sum256([]byte(key))
 
 	err := db.Client.Create(&model.Sessions{
 		User_id: userid,
-		Key:     hex.EncodeToString(hashedPass[:]),
+		Key:     key,
 	}).Error
 	if err != nil {
 		return public.NewInternalWithError(err)

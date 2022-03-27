@@ -17,6 +17,9 @@ func Main(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		templates.Error.WriteAnyCode(w, http.StatusForbidden, public.Session.NoSession) // overwrite error due to Cookie Error
 		return
 	}
+
+	println(key)
+
 	id, err := db.MySQL.VerifySession(key)
 	if err != nil {
 		if internal, ok := err.(public.InternalWithError); ok {

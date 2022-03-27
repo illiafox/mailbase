@@ -1,6 +1,8 @@
 package methods
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/illiafox/mailbase/cookie"
@@ -67,6 +69,8 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	}
 
 	key := uuid.NewString()
+	hashedPass := sha256.Sum256([]byte(key))
+	key = hex.EncodeToString(hashedPass[:])
 
 	err = cookie.SetSessionKey(w, r, key)
 	if err != nil { // cannot be internal
