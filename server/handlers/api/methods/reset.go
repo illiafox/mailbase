@@ -23,7 +23,7 @@ func Reset(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	// GET: Send Form
 	case http.MethodGet:
-		id, err := db.Redis.GetForgotPass(key)
+		id, err := db.Redis.Forgot.Get(key)
 		if err != nil {
 			if internal, ok := err.(public.InternalWithError); ok {
 				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
@@ -34,7 +34,7 @@ func Reset(db *database.Database, w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = db.Redis.NewResetPass(id, key)
+		err = db.Redis.Reset.New(id, key)
 		if err != nil { // can be only internal
 			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
 			log.Println(fmt.Errorf("API: reset: GET: new Reset buf: %w", err))
@@ -63,7 +63,7 @@ func Reset(db *database.Database, w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		id, err := db.Redis.GetResetPass(key)
+		id, err := db.Redis.Reset.Get(key)
 		if err != nil {
 			if internal, ok := err.(public.InternalWithError); ok {
 				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)

@@ -65,7 +65,7 @@ func Forgot(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db.Redis.NewForgotPass(exist.User_id, key)
+	db.Redis.Forgot.New(exist.User_id, key)
 	if err != nil { // can be only internal
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
 		log.Println(fmt.Errorf("API: register: new buf: %w", err))

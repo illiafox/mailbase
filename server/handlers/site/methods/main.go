@@ -31,7 +31,7 @@ func Main(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	user, err := db.MySQL.GetUserById(id)
 	if err != nil {
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
-		log.Println(fmt.Errorf("Site: mainpage: mysql: getuserbyid: %w", err))
+		log.Println(fmt.Errorf("site: mainpage: mysql: getuserbyid: %w", err))
 		return
 	}
 

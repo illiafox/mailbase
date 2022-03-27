@@ -5,9 +5,15 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/illiafox/mailbase/shared/public"
 	"strconv"
+	"time"
 )
 
-func (r *Redis) NewResetPass(userid int, key string) error {
+type Reset struct {
+	Client *redis.Client
+	Expire time.Duration
+}
+
+func (r *Reset) New(userid int, key string) error {
 	key, err := EventJson(ResetPass, key)
 	if err != nil {
 		return err
@@ -15,7 +21,7 @@ func (r *Redis) NewResetPass(userid int, key string) error {
 	return r.Client.SetEX(context.Background(), key, userid, r.Expire).Err()
 }
 
-func (r *Redis) GetResetPass(key string) (int, error) {
+func (r *Reset) Get(key string) (int, error) {
 	key, err := EventJson(ResetPass, key)
 	if err != nil {
 		return -1, err

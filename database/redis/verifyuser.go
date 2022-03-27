@@ -6,9 +6,15 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/illiafox/mailbase/database/mysql/model"
 	"github.com/illiafox/mailbase/shared/public"
+	"time"
 )
 
-func (r *Redis) NewVerifyUser(user model.Users, key string) error {
+type Verify struct {
+	Client *redis.Client
+	Expire time.Duration
+}
+
+func (v *Verify) New(user model.Users, key string) error {
 	data, err := json.Marshal(user)
 	if err != nil {
 		return err
@@ -17,10 +23,10 @@ func (r *Redis) NewVerifyUser(user model.Users, key string) error {
 	if err != nil {
 		return err
 	}
-	return r.Client.SetEX(context.Background(), key, data, r.Expire).Err()
+	return v.Client.SetEX(context.Background(), key, data, v.Expire).Err()
 }
 
-func (r *Redis) GetVerifyUser(key string) (model.Users, error) {
+func (v *Verify) Get(key string) (model.Users, error) {
 	var user model.Users
 
 	key, err := EventJson(VerifyUser, key)
@@ -28,7 +34,7 @@ func (r *Redis) GetVerifyUser(key string) (model.Users, error) {
 		return user, public.NewInternalWithError(err)
 	}
 
-	data, err := r.Client.GetDel(context.Background(), key).Bytes()
+	data, err := v.Client.GetDel(context.Background(), key).Bytes()
 	if err != nil {
 		if err == redis.Nil {
 			return user, public.Register.KeyNotFound

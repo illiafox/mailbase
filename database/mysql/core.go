@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// TODO: SPLIT ALL METHODS
 type MySQL struct {
 	Client *gorm.DB
 }

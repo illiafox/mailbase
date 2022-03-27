@@ -81,7 +81,7 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	}
 
 	hashedPass := sha256.Sum256([]byte(Password))
-	err = db.Redis.NewVerifyUser(model.Users{
+	err = db.Redis.Verify.New(model.Users{
 		Email:    Mail,
 		Password: hex.EncodeToString(hashedPass[:]),
 	}, key)

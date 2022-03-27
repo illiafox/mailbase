@@ -5,22 +5,28 @@ import (
 	"github.com/go-redis/redis/v8"
 	"github.com/illiafox/mailbase/shared/public"
 	"strconv"
+	"time"
 )
 
-func (r *Redis) NewForgotPass(userid int, key string) error {
+type Forgot struct {
+	Client *redis.Client
+	Expire time.Duration
+}
+
+func (f *Forgot) New(userid int, key string) error {
 	key, err := EventJson(ForgotPass, key)
 	if err != nil {
 		return err
 	}
-	return r.Client.SetEX(context.Background(), key, userid, r.Expire).Err()
+	return f.Client.SetEX(context.Background(), key, userid, f.Expire).Err()
 }
 
-func (r *Redis) GetForgotPass(key string) (int, error) {
+func (f *Forgot) Get(key string) (int, error) {
 	key, err := EventJson(ForgotPass, key)
 	if err != nil {
 		return -1, err
 	}
-	n, err := r.Client.GetDel(context.Background(), key).Result()
+	n, err := f.Client.GetDel(context.Background(), key).Result()
 	if err != nil {
 		if err == redis.Nil {
 			return -1, public.Register.KeyNotFound
@@ -28,6 +34,5 @@ func (r *Redis) GetForgotPass(key string) (int, error) {
 			return -1, public.NewInternalWithError(err)
 		}
 	}
-
 	return strconv.Atoi(n)
 }

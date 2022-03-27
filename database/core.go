@@ -7,12 +7,10 @@ import (
 	"github.com/illiafox/mailbase/database/mysql"
 	"github.com/illiafox/mailbase/database/redis"
 	"github.com/illiafox/mailbase/mail"
-	"github.com/illiafox/mailbase/shared/public"
 	"github.com/illiafox/mailbase/util/config"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"net/http"
-	"time"
 )
 
 type Database struct {
@@ -92,10 +90,7 @@ func NewDatabase(conf config.Config) (*Database, error) {
 
 	return &Database{
 		// // Redis
-		Redis: redis.Redis{
-			Client: rdb,
-			Expire: time.Duration(public.Redis.ExpireSeconds) * time.Second,
-		},
+		Redis: redis.NewRedis(rdb, conf),
 
 		// // Mysql
 		MySQL: sqlDB,
