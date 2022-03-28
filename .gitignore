@@ -4,3 +4,4 @@ cmd/dump.rdb
 .idea
 .github
 /cmd/log.txt
+/cmd/go_build_github_com_illiafox_mailbase_cmd

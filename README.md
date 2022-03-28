@@ -17,12 +17,16 @@
 
 # Running
 
+#### HTTPS is _required_ for [jwt](https://github.com/golang-jwt/jwt) cookies
+#### Fastest solution is use [ngrok](https://ngrok.com/) and the like
+
+---
 You can find **config template** in [cmd](https://github.com/illiafox/mailbase/blob/master/cmd/config.toml) folder
 
 Config [parser](https://github.com/illiafox/mailbase/blob/master/util/config/config.go) supports small variety of formats (you can implement new)
 
 
-```go
+``` go
 go run . -conf conf.toml -type toml
 
 go run . -conf conf.json -type json
@@ -37,6 +41,11 @@ For instance, default url is `https://localhost:8080/api/verify?key=`
 
 With unique site it would look like `https://yoursite.com/api/verify?key=`
 
+# Docker
+
+Image connects to local databases, `--net=host` is obvious
+
+To add execution arguments use `$ARGS` environment variable
 
 # Site map
 
@@ -58,8 +67,3 @@ With unique site it would look like `https://yoursite.com/api/verify?key=`
 
 `/api/reset` recover form
 
-# Docker
-
-Image connects to local databases, `--net=host` is obvious
-
-To add execution arguments use `$ARGS` environment variable

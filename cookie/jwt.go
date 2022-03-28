@@ -62,6 +62,7 @@ func (_ session) GetClaim(r *http.Request) (string, error) {
 	if store.IsNew {
 		return "", public.Session.NoSession
 	}
+
 	jwtFromHeader, ok := store.Values["key"].(string)
 	if !ok {
 		return "", public.Session.NoSession
