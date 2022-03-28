@@ -23,6 +23,6 @@ type Users struct {
 
 type Sessions struct {
 	User_id int    `gorm:"type:INT"` //СДЕЛАЛ foreign key to Users.User_id
-	Key     string `gorm:"type:VARCHAR(64);not_null"`
+	Key     string `gorm:"type:VARCHAR(209);not_null"`
 	Time
 }

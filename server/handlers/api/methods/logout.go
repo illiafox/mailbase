@@ -11,9 +11,15 @@ import (
 )
 
 func Logout(db *database.Database, w http.ResponseWriter, r *http.Request) {
-	key, err := cookie.GetSessionKey(r)
-	if err != nil { // cannot be internal
-		templates.Error.WriteAnyCode(w, http.StatusForbidden, err) // overwrite error due to Cookie Error
+
+	key, err := cookie.Session.GetClaim(r)
+	if err != nil {
+		if internal, ok := err.(public.InternalWithError); ok {
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+			log.Println(fmt.Errorf("API: logout: cookie: get claim: %w", internal))
+		} else {
+			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
+		}
 		return
 	}
 
@@ -21,6 +27,12 @@ func Logout(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	if err != nil { // only internal
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
 		log.Println(fmt.Errorf("API: logout: mysql: Delete Session by key (%s): %w", key, err))
+		return
+	}
+
+	err = cookie.Session.DeleteClaim(w, r)
+	if err != nil {
+		templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
 		return
 	}
 

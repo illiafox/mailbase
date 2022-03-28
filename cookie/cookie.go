@@ -5,9 +5,11 @@ import (
 	"net/http"
 )
 
-const cookie = "2F423F4528482B4D6251655468576D5A7133743677397A24432646294A404E63A"
+// Hash sum
+const cookie = "4DB2E134E453D713A48316A422DBDB812F2C79C2815F152C0147A3CB86864D53"
 
 var (
+	//	cookieByte = []byte(cookie)
 	Store *sessions.CookieStore
 )
 
