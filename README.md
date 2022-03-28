@@ -1,8 +1,10 @@
 # mailbase
 
 [![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/illiafox/mailbase.svg)](https://go.dev/learn/)
-[![Go](https://github.com/illiafox/mailbase/actions/workflows/go.yml/badge.svg)](https://github.com/illiafox/mailbase/actions/workflows/go.yml)
 [![GoReportCard example](https://goreportcard.com/badge/github.com/illiafox/mailbase)](https://goreportcard.com/report/github.com/illiafox/mailbase)
+
+[![Go](https://github.com/illiafox/mailbase/actions/workflows/go.yml/badge.svg)](https://github.com/illiafox/mailbase/actions/workflows/go.yml)
+[![Docker](https://github.com/illiafox/mailbase/actions/workflows/docker-image.yml/badge.svg)](https://github.com/illiafox/mailbase/actions/workflows/docker-image.yml)
 
 ## login/register/logout/delete server with mail checking using go, redis and mysql
 
