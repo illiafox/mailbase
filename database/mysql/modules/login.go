@@ -1,4 +1,4 @@
-package mysql
+package modules
 
 import (
 	"github.com/illiafox/mailbase/database/mysql/model"
@@ -6,7 +6,12 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func (db *MySQL) MailExist(email string) (*model.Users, error) {
+type Login struct {
+	Client *gorm.DB
+}
+
+// MailExist returns nil error if mail exists
+func (db Login) MailExist(email string) (*model.Users, error) {
 	var user model.Users
 	err := db.Client.First(&user, "email = ?", email).Error
 	if err != nil {
@@ -18,7 +23,7 @@ func (db *MySQL) MailExist(email string) (*model.Users, error) {
 	return &user, nil
 }
 
-func (db *MySQL) GetUserByID(id int) (*model.Users, error) {
+func (db Login) GetUserByID(id int) (*model.Users, error) {
 	var user model.Users
 	err := db.Client.First(&user, "user_id = ?", id).Error
 	if err != nil {

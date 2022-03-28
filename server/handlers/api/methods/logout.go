@@ -23,7 +23,7 @@ func Logout(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = db.MySQL.DeleteSessionByKey(key)
+	err = db.MySQL.Session.DeleteByKey(key)
 	if err != nil { // only internal
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: logout: mysql: Delete Session by key (%s): %w", key, err))
@@ -36,7 +36,7 @@ func Logout(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	templates.Successful.WriteAny(w, `You will be redirected to login page after 5 seconds
+	templates.Successful.WriteAny(w, `You will be redirected to login page soon
 <script>  
 setTimeout(function (){
     window.location = "/login";

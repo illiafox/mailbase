@@ -57,7 +57,7 @@ func main() {
 	}
 
 	// Clear old sessions
-	err = db.MySQL.ClearSessions(7)
+	err = db.MySQL.Session.Clear(7)
 	if err != nil {
 		log.Println("Clearing sessions:", err)
 		return
@@ -70,11 +70,13 @@ func main() {
 	// If you have better solution, please suggest it in the issue or contact me https://t.me/ebashu_gerych
 	defer func() {
 		close(sig)
+		log.Print("Shutting down server")
 		err = serv.Shutdown(context.Background())
 		if err != nil {
 			log.Println(fmt.Errorf("shutdown: server: %w", err))
 		}
 		ok := true
+		log.Print("Closing connections")
 		for _, err = range db.Close() {
 			if err != nil {
 				ok = false
@@ -90,10 +92,10 @@ func main() {
 
 	go func() {
 		if conf.Host.HTTP {
-			log.Printf("Server started in HTTP mode at 127.0.0.1:" + conf.Host.Port)
+			log.Printf("Server started [HTTP] at 127.0.0.1:" + conf.Host.Port)
 			err = serv.ListenAndServe() // HTTP
 		} else {
-			log.Printf("Server started in HTTPS mode at 127.0.0.1:" + conf.Host.Port)
+			log.Printf("Server started [HTTPS] at 127.0.0.1:" + conf.Host.Port)
 			err = serv.ListenAndServeTLS(conf.Host.Cert, conf.Host.Key) // HTTPS
 		}
 

@@ -63,12 +63,17 @@ func NewDatabase(conf config.Config) (*Database, error) {
 
 	sqlDB, err := mysql.Init(gormSQL)
 	if err != nil {
+		rdb.Close()
+
 		return nil, fmt.Errorf("initializing gorm: %w", err)
 	}
 
 	// // Mail
 	Mail, err := mail.NewMail(conf)
 	if err != nil {
+		rdb.Close()
+		sqlDB.Client.Close()
+
 		return nil, fmt.Errorf("initializing smtp: %w", err)
 	}
 

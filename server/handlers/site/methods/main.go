@@ -24,7 +24,7 @@ func Main(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := db.MySQL.VerifySession(key)
+	id, err := db.MySQL.Session.Verify(key)
 	if err != nil {
 		if errors.Is(err, public.ErrorInternal) {
 			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
@@ -35,7 +35,7 @@ func Main(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := db.MySQL.GetUserByID(id)
+	user, err := db.MySQL.Login.GetUserByID(id)
 	if err != nil {
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("site: mainpage: mysql: getuserbyid: %w", err))

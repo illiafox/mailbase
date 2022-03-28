@@ -4,12 +4,16 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"log"
 	"net/http"
 )
 
 func CompileTemplate(filepath ...string) *ExecTemplate {
 	t, err := template.New("index.html").ParseFiles(filepath...)
-	return &ExecTemplate{Tmpl: template.Must(t, err)}
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return &ExecTemplate{Tmpl: t}
 }
 
 type ExecTemplate struct {

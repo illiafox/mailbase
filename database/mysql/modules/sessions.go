@@ -1,4 +1,4 @@
-package mysql
+package modules
 
 import (
 	"errors"
@@ -10,8 +10,12 @@ import (
 	"time"
 )
 
-// VerifySession key: UUID from cookie, int: user_id
-func (db *MySQL) VerifySession(key string) (int, error) {
+type Session struct {
+	Client *gorm.DB
+}
+
+// Verify key: UUID from cookie, int: user_id
+func (db Session) Verify(key string) (int, error) {
 	session := model.Sessions{}
 
 	err := db.Client.First(&session, "`key` = ?", key).Error // key в sql распознается как синтаксис, поэтому берем в ` `
@@ -34,7 +38,8 @@ func (db *MySQL) VerifySession(key string) (int, error) {
 	return session.User_id, nil
 }
 
-func (db *MySQL) InsertSession(userid int, key string) error {
+// Insert creates new session
+func (db Session) Insert(userid int, key string) error {
 	err := db.Client.Create(&model.Sessions{
 		User_id: userid,
 		Key:     key,
@@ -45,7 +50,9 @@ func (db *MySQL) InsertSession(userid int, key string) error {
 
 	return nil
 }
-func (db *MySQL) ClearSessions(days int) error {
+
+// Clear deletes old sessions using DATEDIFF
+func (db Session) Clear(days int) error {
 	err := db.Client.Delete(&model.Sessions{}, "DATEDIFF(NOW(),created_at) > ?", days).Error
 	if err != nil {
 		if !gorm.IsRecordNotFoundError(err) {
@@ -55,7 +62,7 @@ func (db *MySQL) ClearSessions(days int) error {
 	return nil
 }
 
-func (db *MySQL) DeleteSessionByKey(key string) error {
+func (db Session) DeleteByKey(key string) error {
 	err := db.Client.Delete(&model.Sessions{Key: key}).Error
 	if err != nil {
 		return public.NewInternalWithError(err)
@@ -63,7 +70,7 @@ func (db *MySQL) DeleteSessionByKey(key string) error {
 	return nil
 }
 
-// DeleteSessionByUserID Can be only internal
-func (db *MySQL) DeleteSessionByUserID(id int) error {
+// DeleteByUserID error can be only internal
+func (db Session) DeleteByUserID(id int) error {
 	return db.Client.Delete(&model.Sessions{}, "user_id = ?", id).Error
 }

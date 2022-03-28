@@ -1,9 +1,10 @@
-package redis
+package modules
 
 import (
 	"context"
 	"errors"
 	"github.com/go-redis/redis/v8"
+	"github.com/illiafox/mailbase/database/redis/event"
 	"github.com/illiafox/mailbase/shared/public"
 	"strconv"
 	"time"
@@ -15,7 +16,7 @@ type Forgot struct {
 }
 
 func (f *Forgot) New(userid int, key string) error {
-	key, err := EventJSON(ForgotPass, key)
+	key, err := event.EventJSON(event.ForgotPass, key)
 	if err != nil {
 		return err
 	}
@@ -23,7 +24,7 @@ func (f *Forgot) New(userid int, key string) error {
 }
 
 func (f *Forgot) Get(key string) (int, error) {
-	key, err := EventJSON(ForgotPass, key)
+	key, err := event.EventJSON(event.ForgotPass, key)
 	if err != nil {
 		return -1, err
 	}

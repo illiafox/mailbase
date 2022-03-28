@@ -1,4 +1,4 @@
-package redis
+package modules
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/go-redis/redis/v8"
 	"github.com/illiafox/mailbase/database/mysql/model"
+	"github.com/illiafox/mailbase/database/redis/event"
 	"github.com/illiafox/mailbase/shared/public"
 	"time"
 )
@@ -20,7 +21,7 @@ func (v *Verify) New(user model.Users, key string) error {
 	if err != nil {
 		return err
 	}
-	key, err = EventJSON(VerifyUser, key)
+	key, err = event.EventJSON(event.VerifyUser, key)
 	if err != nil {
 		return err
 	}
@@ -30,7 +31,7 @@ func (v *Verify) New(user model.Users, key string) error {
 func (v *Verify) Get(key string) (model.Users, error) {
 	var user model.Users
 
-	key, err := EventJSON(VerifyUser, key)
+	key, err := event.EventJSON(event.VerifyUser, key)
 	if err != nil {
 		return user, public.NewInternalWithError(err)
 	}

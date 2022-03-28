@@ -28,7 +28,7 @@ func Verify(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	exist, err := db.MySQL.MailExist(user.Email)
+	exist, err := db.MySQL.Login.MailExist(user.Email)
 	if err != nil { // can be only internal
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: verify: check login exist: %w", err))
@@ -39,7 +39,7 @@ func Verify(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = db.MySQL.RegisterUser(user)
+	err = db.MySQL.Register.NewUser(user)
 	if err != nil { // can be only internal
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: verify: mysql: create user: %w", err))

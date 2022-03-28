@@ -53,7 +53,7 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	exist, err := db.MySQL.MailExist(Mail)
+	exist, err := db.MySQL.Login.MailExist(Mail)
 	if err != nil { // can be only internal
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: login: check login exist: %w", err))
@@ -84,7 +84,7 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = db.MySQL.InsertSession(exist.User_id, key)
+	err = db.MySQL.Session.Insert(exist.User_id, key)
 	if err != nil { // can be only internal
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: login: insert session: %w", err))

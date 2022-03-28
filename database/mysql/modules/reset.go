@@ -1,4 +1,4 @@
-package mysql
+package modules
 
 import (
 	"github.com/illiafox/mailbase/crypt"
@@ -7,7 +7,12 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func (db *MySQL) ResetPass(id int, pass string) error {
+type Reset struct {
+	Client *gorm.DB
+}
+
+// UpdatePass sets new password for user id
+func (db Reset) UpdatePass(id int, pass string) error {
 	var user model.Users
 
 	err := db.Client.First(&user, "user_id = ?", id).Error

@@ -72,7 +72,7 @@ func Reset(db *database.Database, w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = db.MySQL.DeleteSessionByUserID(id)
+		err = db.MySQL.Session.DeleteByUserID(id)
 		if err != nil { // can be only internal
 			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 			log.Println(fmt.Errorf("API: reset: POST: redis: DeleteSessionByUserId: %w", err))
@@ -85,7 +85,7 @@ func Reset(db *database.Database, w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = db.MySQL.ResetPass(id, hashedPass)
+		err = db.MySQL.Reset.UpdatePass(id, hashedPass)
 		if err != nil {
 			if errors.Is(err, public.ErrorInternal) {
 				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
