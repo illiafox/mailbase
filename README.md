@@ -36,6 +36,12 @@ go run . -conf conf.json -type json
 go run . -conf conf.yaml -type yaml
 ```
 
+Logs are also saved in `log.txt`
+
+With **[Multiwriter](https://github.com/illiafox/mailbase/blob/master/util/multiwriter/writer.go)** outputs can be expanded to unlimited count (**[io.Writer](https://pkg.go.dev/io#Writer)** implemented)
+```go
+log.SetOutput( multiwriter.NewMultiWriter(os.Stderr,yourWriter,otherWriter) )
+```
 ## HTTP mode:
 
 **[jwt](https://github.com/golang-jwt/jwt)** works bad without `https` (depending on browser)

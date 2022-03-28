@@ -2,5 +2,4 @@ cmd/illia.toml
 cmd/redis.sh
 cmd/dump.rdb
 .idea
-/cmd/log.txt
 /cmd/go_build_github_com_illiafox_mailbase_cmd

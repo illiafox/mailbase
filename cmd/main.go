@@ -23,6 +23,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	log.SetOutput(multiwriter.NewMultiWriter(file, os.Stderr))
 
 	// // Flags
@@ -30,15 +31,17 @@ func main() {
 
 	format := config.TOML
 
-	flag.Func("format", fmt.Sprintf("config format, default 'json' (available: %s)\nEx: -format yaml", config.Available), func(s string) error {
-		if s != "" {
-			format = config.FormatMap[s]
-			if format == 0 { // Config formats start from 1
-				return fmt.Errorf("unknown format '%s'", s)
+	flag.Func("format",
+		fmt.Sprintf("config format, default 'json' (available: %s)\nEx: -format yaml", config.Available),
+		func(s string) error {
+			if s != "" {
+				format = config.FormatMap[s]
+				if format == 0 { // Config formats start from 1
+					return fmt.Errorf("unknown format '%s'", s)
+				}
 			}
-		}
-		return nil
-	})
+			return nil
+		})
 
 	flag.Parse()
 
