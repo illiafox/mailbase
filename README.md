@@ -23,9 +23,9 @@
 ### HTTPS is _required_ for [jwt](https://github.com/golang-jwt/jwt) cookies
 
 ---
-You can find **config template** in [cmd](https://github.com/illiafox/mailbase/blob/master/cmd/config.toml) folder
+The **config template** is located in [cmd](https://github.com/illiafox/mailbase/blob/master/cmd/config.toml) folder
 
-Config [parser](https://github.com/illiafox/mailbase/blob/master/util/config/config.go) supports small variety of formats (you can implement new)
+The [config parser](https://github.com/illiafox/mailbase/blob/master/util/config/config.go) supports small variety of formats (you can implement new)
 
 
 ``` go
@@ -48,6 +48,7 @@ log.SetOutput( multiwriter.NewMultiWriter(os.Stderr,fileWriter,otherWriter) )
 
 Although, you can force it in config file 
 ``` toml
+[Host]
 HTTP = true
 ```
 
@@ -61,17 +62,17 @@ With unique site it would look like `https://yoursite.com/api/verify?key=`
 
 # Docker
 
-Image connects to local databases, `--net=host` is obvious
+Image connects to the local databases, `--net=host` is obvious
 
-To add execution arguments use `$ARGS` environment variable
+To add execution arguments use the `$ARGS` environment variable
 
 
 # [nojwt](https://github.com/illiafox/mailbase/tree/nojwt) branch
-Old **unsecured** server version works well with `http`, but all cookies can be stolen in few steps
+The old **unsecured** server version works well with `http`, but all cookies can be stolen in few steps
 
 Another solution is use **[ngrok](https://ngrok.com/)** and the like services to create http tunnel, which allow you to choose [newer version](https://github.com/illiafox/mailbase) with `jwt`
 
-### ngrok example:
+#### ngrok example for regions:
 ```shell
 ngrok http -region=eu 8080
 
