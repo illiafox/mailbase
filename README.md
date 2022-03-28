@@ -68,7 +68,7 @@ To add execution arguments use the `$ARGS` environment variable
 
 
 # [nojwt](https://github.com/illiafox/mailbase/tree/nojwt) branch
-The old **unsecured** server version works well with `http`, but all cookies can be stolen in few steps
+The old **unsecured** server version works well with `http`, but all cookies can be stolen easily
 
 Another solution is use **[ngrok](https://ngrok.com/)** and the like services to create http tunnel, which allow you to choose [newer version](https://github.com/illiafox/mailbase) with `jwt`
 
