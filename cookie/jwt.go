@@ -56,23 +56,18 @@ func (_ session) SetClaim(w http.ResponseWriter, r *http.Request, key string) (s
 func (_ session) GetClaim(r *http.Request) (string, error) {
 	store, err := Store.Get(r, "credentials")
 	if err != nil {
-		multi, ok := err.(securecookie.MultiError)
-		if !ok || !multi.IsDecode() {
-			return "", public.Cookie.CookieError
-		}
+		return "", public.Cookie.CookieError
 	}
 
 	if store.IsNew {
 		return "", public.Session.NoSession
 	}
-
 	jwtFromHeader, ok := store.Values["key"].(string)
 	if !ok {
 		return "", public.Session.NoSession
 	}
 
 	var claim SessionClaim
-
 	token, err := jwt.ParseWithClaims(
 		jwtFromHeader,
 		&claim,
