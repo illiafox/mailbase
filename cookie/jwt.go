@@ -2,6 +2,7 @@ package cookie
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gorilla/securecookie"
 	"github.com/illiafox/mailbase/shared/public"
 	"net/http"
 	"time"
@@ -26,7 +27,10 @@ type session struct {
 func (_ session) SetClaim(w http.ResponseWriter, r *http.Request, key string) (string, error) {
 	store, err := Store.Get(r, "credentials")
 	if err != nil {
-		return "", public.Cookie.CookieError
+		multi, ok := err.(securecookie.MultiError)
+		if !ok || !multi.IsDecode() {
+			return "", public.Cookie.CookieError
+		}
 	}
 
 	claims := SessionClaim{
@@ -52,7 +56,10 @@ func (_ session) SetClaim(w http.ResponseWriter, r *http.Request, key string) (s
 func (_ session) GetClaim(r *http.Request) (string, error) {
 	store, err := Store.Get(r, "credentials")
 	if err != nil {
-		return "", public.Cookie.CookieError
+		multi, ok := err.(securecookie.MultiError)
+		if !ok || !multi.IsDecode() {
+			return "", public.Cookie.CookieError
+		}
 	}
 
 	if store.IsNew {

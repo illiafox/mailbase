@@ -6,7 +6,7 @@ import (
 )
 
 var Cookie = cookie{
-	CookieError: errors.New("cookie error! Please, enable them - we store only credentials"),
+	CookieError: errors.New("cookie error! Please, try <a href='/login'>Login</a> again"),
 	MaxAge:      int64(time.Hour * 24 * 7), // 7 days
 }
 
