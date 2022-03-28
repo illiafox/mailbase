@@ -56,10 +56,9 @@ Image connects to local databases, `--net=host` is obvious
 
 To add execution arguments use `$ARGS` environment variable
 
-## [nojwt](https://github.com/illiafox/mailbase/tree/nojwt) branch
-Old **unsecured** version of server works well with `http`, but all cookies can be stolen in few steps
 
----
+# [nojwt](https://github.com/illiafox/mailbase/tree/nojwt) branch
+Old **unsecured** server version works well with `http`, but all cookies can be stolen in few steps
 
 Another solution is use **[ngrok](https://ngrok.com/)** and the like services to create http tunnel, which allow you to choose [newer version](https://github.com/illiafox/mailbase) with `jwt`
 
@@ -69,7 +68,7 @@ ngrok http -region=eu 8080
 
 ngrok http -region=us 8080
 ```
-
+---
 
 # Site map
 
