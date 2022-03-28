@@ -1,6 +1,7 @@
 package methods
 
 import (
+	"errors"
 	"fmt"
 	"github.com/illiafox/mailbase/cookie"
 	"github.com/illiafox/mailbase/database"
@@ -11,12 +12,11 @@ import (
 )
 
 func Logout(db *database.Database, w http.ResponseWriter, r *http.Request) {
-
 	key, err := cookie.Session.GetClaim(r)
 	if err != nil {
-		if internal, ok := err.(public.InternalWithError); ok {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
-			log.Println(fmt.Errorf("API: logout: cookie: get claim: %w", internal))
+		if errors.Is(err, public.ErrorInternal) {
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+			log.Println(fmt.Errorf("API: logout: cookie: get claim: %w", err))
 		} else {
 			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
 		}
@@ -25,7 +25,7 @@ func Logout(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	err = db.MySQL.DeleteSessionByKey(key)
 	if err != nil { // only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: logout: mysql: Delete Session by key (%s): %w", key, err))
 		return
 	}
@@ -43,5 +43,4 @@ setTimeout(function (){
 }, 5000);
 </script>  
 `)
-
 }

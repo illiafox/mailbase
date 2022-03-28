@@ -9,6 +9,7 @@ import (
 	"github.com/illiafox/mailbase/mail"
 	"github.com/illiafox/mailbase/util/config"
 	"github.com/jinzhu/gorm"
+	//nolint:revive
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"net/http"
 )
@@ -25,29 +26,13 @@ func (db *Database) Close() (err [2]error) {
 	return
 }
 
-func (db *Database) Wrap(i any) http.HandlerFunc {
-	switch i.(type) {
-
-	case func(http.ResponseWriter, *http.Request):
-		return i.(func(http.ResponseWriter, *http.Request))
-
-	case func(*Database, http.ResponseWriter, *http.Request):
-
-		f := i.(func(*Database, http.ResponseWriter, *http.Request))
-
-		return func(writer http.ResponseWriter, request *http.Request) {
-			f(db, writer, request)
-		}
-
-	default:
-		panic(fmt.Sprintf("%T not implemented by wrapper", i))
+func (db *Database) Wrap(f func(*Database, http.ResponseWriter, *http.Request)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		f(db, w, r)
 	}
-
-	return nil
 }
 
 func NewDatabase(conf config.Config) (*Database, error) {
-
 	// // Redis
 	rdb := goRedis.NewClient(&goRedis.Options{
 		Addr:     conf.Redis.Addr,
@@ -60,14 +45,13 @@ func NewDatabase(conf config.Config) (*Database, error) {
 	}
 
 	// // MySQL
-
 	gormSQL, err := gorm.Open(
 		"mysql",
 		fmt.Sprintf("%s:%s@%s(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 			conf.MySQL.Login,
 			conf.MySQL.Pass,
 			conf.MySQL.Protocol,
-			conf.MySQL.Ip,
+			conf.MySQL.IP,
 			conf.MySQL.Port,
 			conf.MySQL.DbName,
 		),
@@ -91,12 +75,13 @@ func NewDatabase(conf config.Config) (*Database, error) {
 	return &Database{
 		// // Redis
 		Redis: redis.NewRedis(rdb, conf),
-
 		// // Mysql
 		MySQL: sqlDB,
-
 		// // Mail
 		Mail: Mail,
 	}, nil
+}
 
+type Wrap interface {
+	func(*Database, http.ResponseWriter, *http.Request) | func(http.ResponseWriter, *http.Request)
 }

@@ -53,7 +53,7 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	exist, err := db.MySQL.MailExist(Mail)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: register: check login exist: %w", err))
 		return
 	}
@@ -67,21 +67,21 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	var buf bytes.Buffer
 	err = templates.Mail.Verify.WriteBytes(&buf, key)
 	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: register: create message with key: %w", err))
 		return
 	}
 
 	err = db.Mail.SendMessage(Mail, "Your verify link", buf.String())
 	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: register: send mail (%s): %w", Mail, err))
 		return
 	}
 
 	hashedPass, err := crypt.HashPassword(Password)
 	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: register: hash password: %w", err))
 		return
 	}
@@ -92,10 +92,9 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	}, key)
 
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: register: new buf: %w", err))
 	} else {
 		templates.Successful.WriteAny(w, "Check your email box :)")
 	}
-
 }

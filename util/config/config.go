@@ -60,9 +60,7 @@ func ReadConfig(filename string, format Format) (Config, error) {
 	if err != nil {
 		return conf, err
 	}
-
 	switch format {
-
 	default:
 		return conf, fmt.Errorf("unknown format %d", format)
 

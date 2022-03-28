@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"errors"
 	"github.com/go-redis/redis/v8"
 	"github.com/illiafox/mailbase/shared/public"
 	"strconv"
@@ -14,7 +15,7 @@ type Reset struct {
 }
 
 func (r *Reset) New(userid int, key string) error {
-	key, err := EventJson(ResetPass, key)
+	key, err := EventJSON(ResetPass, key)
 	if err != nil {
 		return err
 	}
@@ -22,17 +23,17 @@ func (r *Reset) New(userid int, key string) error {
 }
 
 func (r *Reset) Get(key string) (int, error) {
-	key, err := EventJson(ResetPass, key)
+	key, err := EventJSON(ResetPass, key)
 	if err != nil {
 		return -1, err
 	}
+
 	n, err := r.Client.GetDel(context.Background(), key).Result()
 	if err != nil {
-		if err == redis.Nil {
+		if errors.Is(err, redis.Nil) {
 			return -1, public.Register.KeyNotFound
-		} else {
-			return -1, public.NewInternalWithError(err)
 		}
+		return -1, public.NewInternalWithError(err)
 	}
 
 	return strconv.Atoi(n)

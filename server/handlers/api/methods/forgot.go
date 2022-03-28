@@ -39,7 +39,7 @@ func Forgot(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	exist, err := db.MySQL.MailExist(Mail)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: forgot: check login exist: %w", err))
 		return
 	}
@@ -53,24 +53,23 @@ func Forgot(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	var buf bytes.Buffer
 	err = templates.Mail.ResetPass.WriteBytes(&buf, key)
 	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: forgot: create message with key: %w", err))
 		return
 	}
 
 	err = db.Mail.SendMessage(Mail, "Your verify link", buf.String())
 	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: forgot: send mail (%s): %w", Mail, err))
 		return
 	}
 
-	db.Redis.Forgot.New(exist.User_id, key)
+	err = db.Redis.Forgot.New(exist.User_id, key)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: register: new buf: %w", err))
 	} else {
 		templates.Successful.WriteAny(w, "Check your email box :)")
 	}
-
 }

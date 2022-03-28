@@ -24,9 +24,10 @@ var Session session
 type session struct {
 }
 
-func (_ session) SetClaim(w http.ResponseWriter, r *http.Request, key string) (string, error) {
+func (session) SetClaim(w http.ResponseWriter, r *http.Request, key string) (string, error) {
 	store, err := Store.Get(r, "credentials")
 	if err != nil {
+		//nolint:errorlint
 		multi, ok := err.(securecookie.MultiError)
 		if !ok || !multi.IsDecode() {
 			return "", public.Cookie.CookieError
@@ -53,7 +54,7 @@ func (_ session) SetClaim(w http.ResponseWriter, r *http.Request, key string) (s
 	return key, nil
 }
 
-func (_ session) GetClaim(r *http.Request) (string, error) {
+func (session) GetClaim(r *http.Request) (string, error) {
 	store, err := Store.Get(r, "credentials")
 	if err != nil {
 		return "", public.Cookie.CookieError
@@ -93,7 +94,7 @@ func (_ session) GetClaim(r *http.Request) (string, error) {
 	return claims.Key, nil
 }
 
-func (_ session) DeleteClaim(w http.ResponseWriter, r *http.Request) error {
+func (session) DeleteClaim(w http.ResponseWriter, r *http.Request) error {
 	store, err := Store.Get(r, "credentials")
 	if err != nil {
 		return public.Cookie.CookieError

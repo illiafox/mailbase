@@ -17,8 +17,7 @@
 
 # Running
 
-#### HTTPS is _required_ for [jwt](https://github.com/golang-jwt/jwt) cookies
-#### Fastest solution is use [ngrok](https://ngrok.com/) and the like
+### HTTPS is _required_ for [jwt](https://github.com/golang-jwt/jwt) cookies
 
 ---
 You can find **config template** in [cmd](https://github.com/illiafox/mailbase/blob/master/cmd/config.toml) folder
@@ -34,6 +33,16 @@ go run . -conf conf.json -type json
 go run . -conf conf.yaml -type yaml
 ```
 
+## HTTP mode:
+
+**[jwt](https://github.com/golang-jwt/jwt)** works bad without `https` (depending on browser)
+
+Although, you can force it in config file 
+``` toml
+HTTP = true
+```
+
+
 # Mail links
 In [mails](https://github.com/illiafox/mailbase/tree/master/shared/templates/mails) folder you ought to change mail message links
 
@@ -46,6 +55,21 @@ With unique site it would look like `https://yoursite.com/api/verify?key=`
 Image connects to local databases, `--net=host` is obvious
 
 To add execution arguments use `$ARGS` environment variable
+
+## [nojwt](https://github.com/illiafox/mailbase/tree/nojwt) branch
+Old **unsecured** version of server works well with `http`, but all cookies can be stolen in few steps
+
+---
+
+Another solution is use **[ngrok](https://ngrok.com/)** and the like services to create http tunnel, which allow you to choose [newer version](https://github.com/illiafox/mailbase) with `jwt`
+
+### ngrok example:
+```shell
+ngrok http -region=eu 8080
+
+ngrok http -region=us 8080
+```
+
 
 # Site map
 

@@ -4,7 +4,7 @@ type MySQL struct {
 	Login    string
 	Pass     string
 	DbName   string // 'mysql'
-	Ip       string
+	IP       string
 	Port     string
 	Protocol string
 }
@@ -24,11 +24,14 @@ type Email struct {
 
 type Host struct {
 	Port string
+	HTTP bool   // Start server in http mode
+	Key  string // Path to TLS key
+	Cert string // Path to TLS key
 }
 
 type Config struct {
 	MySQL MySQL
 	Redis Redis
 	Host  Host
-	Smtp  Email
+	SMTP  Email
 }

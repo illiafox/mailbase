@@ -3,6 +3,7 @@ package methods
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/illiafox/mailbase/cookie"
@@ -54,7 +55,7 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	exist, err := db.MySQL.MailExist(Mail)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: login: check login exist: %w", err))
 		return
 	}
@@ -74,9 +75,9 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	_, err = cookie.Session.SetClaim(w, r, key)
 	if err != nil {
-		if internal, ok := err.(public.InternalWithError); ok {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
-			log.Println(fmt.Errorf("API: login: cookie: set claim: %w", internal))
+		if errors.Is(err, public.ErrorInternal) {
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+			log.Println(fmt.Errorf("API: login: cookie: set claim: %w", err))
 		} else {
 			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
 		}
@@ -85,7 +86,7 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	err = db.MySQL.InsertSession(exist.User_id, key)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 		log.Println(fmt.Errorf("API: login: insert session: %w", err))
 	} else {
 		templates.Successful.WriteAny(w, "You can visit <a href=\"/\">main page</a> now")

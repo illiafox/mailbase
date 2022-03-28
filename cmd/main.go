@@ -34,7 +34,7 @@ func main() {
 		if s != "" {
 			format = config.FormatMap[s]
 			if format == 0 { // Config formats start from 1
-				return fmt.Errorf("unknown format '%s'\n", s)
+				return fmt.Errorf("unknown format '%s'", s)
 			}
 		}
 		return nil
@@ -45,13 +45,14 @@ func main() {
 	// // Parsing config
 	conf, err := config.ReadConfig(*configPath, format)
 	if err != nil {
-		log.Fatalln("Parsing config:", err)
+		log.Println("Parsing config:", err)
 		return
 	}
 
+	log.Print("Initializing connections")
 	db, err := database.NewDatabase(conf)
 	if err != nil {
-		log.Fatalln("New Database:", err)
+		log.Println("New Database:", err)
 		return
 	}
 
@@ -64,7 +65,7 @@ func main() {
 
 	serv := server.Init(db, conf)
 
-	sig := make(chan os.Signal)
+	sig := make(chan os.Signal, 1)
 
 	// If you have better solution, please suggest it in the issue or contact me https://t.me/ebashu_gerych
 	defer func() {
@@ -88,8 +89,14 @@ func main() {
 	}()
 
 	go func() {
-		log.Printf("Server started at 127.0.0.1:" + conf.Host.Port)
-		err = serv.ListenAndServe()
+		if conf.Host.HTTP {
+			log.Printf("Server started in HTTP mode at 127.0.0.1:" + conf.Host.Port)
+			err = serv.ListenAndServe() // HTTP
+		} else {
+			log.Printf("Server started in HTTPS mode at 127.0.0.1:" + conf.Host.Port)
+			err = serv.ListenAndServeTLS(conf.Host.Cert, conf.Host.Key) // HTTPS
+		}
+
 		select {
 		case <-sig:
 		default:

@@ -19,9 +19,8 @@ func (db *MySQL) VerifySession(key string) (int, error) {
 		fmt.Println(err)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return -1, public.Session.NoSession
-		} else {
-			return -1, public.NewInternalWithError(err)
 		}
+		return -1, public.NewInternalWithError(err)
 	}
 
 	if int(time.Since(session.Created_at).Hours())/24 >= public.Session.SessionTimoutDays {
@@ -30,14 +29,12 @@ func (db *MySQL) VerifySession(key string) (int, error) {
 			log.Println(fmt.Errorf("mysql: delete old session (%s): %w", key, err))
 		}
 		return -1, public.Session.OldSession
-
 	}
 
 	return session.User_id, nil
 }
 
 func (db *MySQL) InsertSession(userid int, key string) error {
-
 	err := db.Client.Create(&model.Sessions{
 		User_id: userid,
 		Key:     key,
@@ -66,7 +63,7 @@ func (db *MySQL) DeleteSessionByKey(key string) error {
 	return nil
 }
 
-// DeleteSessionByUserId Can be only internal
-func (db *MySQL) DeleteSessionByUserId(id int) error {
+// DeleteSessionByUserID Can be only internal
+func (db *MySQL) DeleteSessionByUserID(id int) error {
 	return db.Client.Delete(&model.Sessions{}, "user_id = ?", id).Error
 }

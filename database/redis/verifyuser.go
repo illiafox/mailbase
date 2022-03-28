@@ -3,6 +3,7 @@ package redis
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/go-redis/redis/v8"
 	"github.com/illiafox/mailbase/database/mysql/model"
 	"github.com/illiafox/mailbase/shared/public"
@@ -19,7 +20,7 @@ func (v *Verify) New(user model.Users, key string) error {
 	if err != nil {
 		return err
 	}
-	key, err = EventJson(VerifyUser, key)
+	key, err = EventJSON(VerifyUser, key)
 	if err != nil {
 		return err
 	}
@@ -29,18 +30,17 @@ func (v *Verify) New(user model.Users, key string) error {
 func (v *Verify) Get(key string) (model.Users, error) {
 	var user model.Users
 
-	key, err := EventJson(VerifyUser, key)
+	key, err := EventJSON(VerifyUser, key)
 	if err != nil {
 		return user, public.NewInternalWithError(err)
 	}
 
 	data, err := v.Client.GetDel(context.Background(), key).Bytes()
 	if err != nil {
-		if err == redis.Nil {
+		if errors.Is(err, redis.Nil) {
 			return user, public.Register.KeyNotFound
-		} else {
-			return user, public.NewInternalWithError(err)
 		}
+		return user, public.NewInternalWithError(err)
 	}
 
 	err = json.Unmarshal(data, &user)

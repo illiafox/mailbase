@@ -1,6 +1,7 @@
 package methods
 
 import (
+	"errors"
 	"fmt"
 	"github.com/illiafox/mailbase/crypt"
 	"github.com/illiafox/mailbase/database"
@@ -17,16 +18,14 @@ func Reset(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		templates.Error.WriteAnyCode(w, http.StatusForbidden, "'key' element in query not found")
 		return
 	}
-
 	switch r.Method {
-
 	// GET: Send Form
 	case http.MethodGet:
 		id, err := db.Redis.Forgot.Get(key)
 		if err != nil {
-			if internal, ok := err.(public.InternalWithError); ok {
-				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
-				log.Println(fmt.Errorf("API: reset: GET: redis: get Forgot buf: %w", internal))
+			if errors.Is(err, public.ErrorInternal) {
+				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+				log.Println(fmt.Errorf("API: reset: GET: redis: get Forgot buf: %w", err))
 			} else {
 				templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
 			}
@@ -35,7 +34,7 @@ func Reset(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 		err = db.Redis.Reset.New(id, key)
 		if err != nil { // can be only internal
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 			log.Println(fmt.Errorf("API: reset: GET: new Reset buf: %w", err))
 			return
 		}
@@ -64,40 +63,38 @@ func Reset(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 		id, err := db.Redis.Reset.Get(key)
 		if err != nil {
-			if internal, ok := err.(public.InternalWithError); ok {
-				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
-				log.Println(fmt.Errorf("API: reset: POST: redis: get Reset buf: %w", internal))
+			if errors.Is(err, public.ErrorInternal) {
+				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+				log.Println(fmt.Errorf("API: reset: POST: redis: get Reset buf: %w", err))
 			} else {
 				templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
 			}
 			return
 		}
 
-		err = db.MySQL.DeleteSessionByUserId(id)
+		err = db.MySQL.DeleteSessionByUserID(id)
 		if err != nil { // can be only internal
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 			log.Println(fmt.Errorf("API: reset: POST: redis: DeleteSessionByUserId: %w", err))
 		}
 
 		hashedPass, err := crypt.HashPassword(Password)
 		if err != nil {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
 			log.Println(fmt.Errorf("API: reset: hash password: %w", err))
 			return
 		}
 
 		err = db.MySQL.ResetPass(id, hashedPass)
 		if err != nil {
-			if internal, ok := err.(public.InternalWithError); ok {
-				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
-				log.Println(fmt.Errorf("API: reset: POST: mysql: Update Password: %w", internal))
+			if errors.Is(err, public.ErrorInternal) {
+				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+				log.Println(fmt.Errorf("API: reset: POST: mysql: Update Password: %w", err))
 			} else {
 				templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
 			}
 			return
 		}
-
 		templates.Successful.WriteAny(w, "Password had been updated<br> Please, <a href='/login'>Login</a>")
 	}
-
 }

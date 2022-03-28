@@ -2,7 +2,7 @@
 Login = "db_username"
 Pass = "db_password"
 DbName = "database_name"
-Ip = "127.0.0.1"
+IP = "127.0.0.1"
 Port = "3306"
 Protocol = "tcp"
 
@@ -14,8 +14,12 @@ ExpireSeconds = 300
 
 [Host]
 Port = "8080"
+Key = "cert/localhost.key"
+Cert = "cert/localhost.crt"
 
-[Smtp]
+HTTP = false
+
+[SMTP]
 MailVerify = "fortstudio8@gmail.com"
 Password = "12345678"
 Hostname = "smtp.gmail.com"

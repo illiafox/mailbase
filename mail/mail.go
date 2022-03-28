@@ -8,8 +8,8 @@ import (
 
 func NewMail(conf config.Config) (Mail, error) {
 	m := Mail{
-		Dialer: gomail.NewDialer(conf.Smtp.Hostname, conf.Smtp.Port, conf.Smtp.Mail, conf.Smtp.Password),
-		From:   conf.Smtp.Mail,
+		Dialer: gomail.NewDialer(conf.SMTP.Hostname, conf.SMTP.Port, conf.SMTP.Mail, conf.SMTP.Password),
+		From:   conf.SMTP.Mail,
 	}
 
 	// Connect to the remote SMTP server.

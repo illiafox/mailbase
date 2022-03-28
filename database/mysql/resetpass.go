@@ -14,9 +14,8 @@ func (db *MySQL) ResetPass(id int, pass string) error {
 	if err != nil {
 		if gorm.IsRecordNotFoundError(err) {
 			return public.Login.MailNotFound
-		} else {
-			return public.NewInternalWithError(err)
 		}
+		return public.NewInternalWithError(err)
 	}
 
 	if crypt.ComparePassword(user.Password, pass) {
