@@ -16,6 +16,7 @@ func (db *MySQL) VerifySession(key string) (int, error) {
 
 	err := db.Client.First(&session, "`key` = ?", key).Error // key в sql распознается как синтаксис, поэтому берем в ` `
 	if err != nil {
+		fmt.Println(err)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return -1, public.Session.NoSession
 		} else {
@@ -24,7 +25,7 @@ func (db *MySQL) VerifySession(key string) (int, error) {
 	}
 
 	if int(time.Since(session.Created_at).Hours())/24 >= public.Session.SessionTimoutDays {
-		err = db.Client.Delete(&session, "key = ?", key).Error
+		err = db.Client.Delete(&session, "`key` = ?", key).Error
 		if err != nil {
 			log.Println(fmt.Errorf("mysql: delete old session (%s): %w", key, err))
 		}

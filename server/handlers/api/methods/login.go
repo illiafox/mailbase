@@ -72,9 +72,14 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	hashedPass := sha256.Sum256([]byte(key))
 	key = hex.EncodeToString(hashedPass[:])
 
-	err = cookie.SetSessionKey(w, r, key)
-	if err != nil { // cannot be internal
-		templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
+	_, err = cookie.Session.SetClaim(w, r, key)
+	if err != nil {
+		if internal, ok := err.(public.InternalWithError); ok {
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
+			log.Println(fmt.Errorf("API: login: cookie: set claim: %w", internal))
+		} else {
+			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
+		}
 		return
 	}
 
@@ -82,8 +87,7 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	if err != nil { // can be only internal
 		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.InternalError)
 		log.Println(fmt.Errorf("API: login: insert session: %w", err))
-		return
 	} else {
-		_ = templates.Successful.WriteAny(w, "You can visit <a href=\"/\">main page</a> now")
+		templates.Successful.WriteAny(w, "You can visit <a href=\"/\">main page</a> now")
 	}
 }
