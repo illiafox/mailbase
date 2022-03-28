@@ -38,15 +38,15 @@ go run . -conf conf.yaml -type yaml
 ---
 Logs are saved in `log.txt`
 
-With **[Multiwriter](https://github.com/illiafox/mailbase/blob/master/util/multiwriter/writer.go)** outputs can be expanded to unlimited count (**[io.Writer](https://pkg.go.dev/io#Writer)** implemented)
+With **[Multiwriter](https://github.com/illiafox/mailbase/blob/master/util/multiwriter/writer.go)** outputs can be expanded to an unlimited count (**[io.Writer](https://pkg.go.dev/io#Writer)** implemented)
 ```go
 log.SetOutput( multiwriter.NewMultiWriter(os.Stderr,fileWriter,otherWriter) )
 ```
 ## HTTP mode:
 
-**[jwt](https://github.com/golang-jwt/jwt)** works bad without `https` (depending on browser)
+**[jwt](https://github.com/golang-jwt/jwt)** works bad without `https` (depending on the browser)
 
-Although, you can force it in config file 
+Although, you can force it in the config file 
 ``` toml
 [Host]
 HTTP = true
@@ -54,15 +54,15 @@ HTTP = true
 
 
 # Mail links
-In [mails](https://github.com/illiafox/mailbase/tree/master/shared/templates/mails) folder you ought to change mail message links
+In the [mails](https://github.com/illiafox/mailbase/tree/master/shared/templates/mails) folder you ought to change mail message links
 
-For instance, default url is `https://localhost:8080/api/verify?key=` 
+For instance, the default url is `https://localhost:8080/api/verify?key=` 
 
-With unique site it would look like `https://yoursite.com/api/verify?key=`
+With an unique site it would look like `https://yoursite.com/api/verify?key=`
 
 # Docker
 
-Image connects to the local databases, `--net=host` is obvious
+Image connects to the local databases, `--net=host` is required
 
 To add execution arguments use the `$ARGS` environment variable
 
