@@ -5,6 +5,7 @@
 
 [![Go](https://github.com/illiafox/mailbase/actions/workflows/go.yml/badge.svg)](https://github.com/illiafox/mailbase/actions/workflows/go.yml)
 [![Docker](https://github.com/illiafox/mailbase/actions/workflows/docker-image.yml/badge.svg)](https://github.com/illiafox/mailbase/actions/workflows/docker-image.yml)
+[![CodeQL](https://github.com/illiafox/mailbase/actions/workflows/codeql.yml/badge.svg)](https://github.com/illiafox/mailbase/actions/workflows/codeql.yml)
 
 ## login/register/logout/delete server with mail checking using go, redis and mysql
 
