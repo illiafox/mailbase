@@ -12,7 +12,6 @@ import (
 )
 
 func Main(db *database.Database, w http.ResponseWriter, r *http.Request) {
-
 	key, err := cookie.Session.GetClaim(r)
 	if err != nil {
 		if errors.Is(err, public.ErrorInternal) {

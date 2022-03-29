@@ -3,11 +3,11 @@ package model
 import "time"
 
 //nolint:revive
-
 type Time struct {
 	Created_at time.Time `gorm:"type:DATETIME;index;not_null"`
 }
 
+//nolint:revive
 type Users struct {
 	User_id int `gorm:"primary_key; auto_increment; not_null" json:"-"`
 
@@ -23,6 +23,7 @@ type Users struct {
 	Time `json:"-"`
 }
 
+//nolint:revive
 type Sessions struct {
 	User_id int    `gorm:"type:INT"` // СДЕЛАЛ foreign key to Users.User_id
 	Key     string `gorm:"type:VARCHAR(209);not_null"`

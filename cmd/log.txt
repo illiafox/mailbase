@@ -1,5 +1,5 @@
-2022/03/28 21:01:38 Initializing connections
-2022/03/28 21:01:40 Server started [HTTPS] at 127.0.0.1:8080
-2022/03/28 21:01:40 Shutting down server
-2022/03/28 21:01:40 Closing connections
-2022/03/28 21:01:40 Database has closed successfully
+2022/03/29 09:20:54 Initializing connections
+2022/03/29 09:21:03 Server started [HTTPS] at 127.0.0.1:8080
+2022/03/29 09:21:14 Shutting down server
+2022/03/29 09:21:14 Closing connections
+2022/03/29 09:21:14 Database has closed successfully

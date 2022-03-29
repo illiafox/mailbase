@@ -85,3 +85,14 @@ func ReadConfig(filename string, format Format) (Config, error) {
 
 	return conf, nil
 }
+func FlagString(format *Format) func(string) error {
+	return func(s string) error {
+		if s != "" {
+			*format = FormatMap[s]
+			if *format == 0 { // Config formats start from 1
+				return fmt.Errorf("unknown format '%s'", s)
+			}
+		}
+		return nil
+	}
+}

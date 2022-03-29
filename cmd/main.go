@@ -31,17 +31,7 @@ func main() {
 
 	format := config.TOML
 
-	flag.Func("format",
-		fmt.Sprintf("config format, default 'json' (available: %s)\nEx: -format yaml", config.Available),
-		func(s string) error {
-			if s != "" {
-				format = config.FormatMap[s]
-				if format == 0 { // Config formats start from 1
-					return fmt.Errorf("unknown format '%s'", s)
-				}
-			}
-			return nil
-		})
+	flag.Func("format", fmt.Sprintf("config format, default 'json' (available: %s)\nEx: -format yaml", config.Available), config.FlagString(&format))
 
 	flag.Parse()
 
@@ -101,7 +91,6 @@ func main() {
 			log.Printf("Server started [HTTPS] at 127.0.0.1:" + conf.Host.Port)
 			err = serv.ListenAndServeTLS(conf.Host.Cert, conf.Host.Key) // HTTPS
 		}
-
 		select {
 		case <-sig:
 		default:

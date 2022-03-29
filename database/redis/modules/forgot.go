@@ -16,7 +16,7 @@ type Forgot struct {
 }
 
 func (f *Forgot) New(userid int, key string) error {
-	key, err := event.EventJSON(event.ForgotPass, key)
+	key, err := event.JSON(event.ForgotPass, key)
 	if err != nil {
 		return err
 	}
@@ -24,7 +24,7 @@ func (f *Forgot) New(userid int, key string) error {
 }
 
 func (f *Forgot) Get(key string) (int, error) {
-	key, err := event.EventJSON(event.ForgotPass, key)
+	key, err := event.JSON(event.ForgotPass, key)
 	if err != nil {
 		return -1, err
 	}

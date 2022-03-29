@@ -9,6 +9,8 @@ import (
 	"github.com/illiafox/mailbase/mail"
 	"github.com/illiafox/mailbase/util/config"
 	"github.com/jinzhu/gorm"
+	"log"
+
 	//nolint:revive
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"net/http"
@@ -63,16 +65,24 @@ func NewDatabase(conf config.Config) (*Database, error) {
 
 	sqlDB, err := mysql.Init(gormSQL)
 	if err != nil {
-		rdb.Close()
-
+		err2 := rdb.Close()
+		if err2 != nil {
+			log.Println("Closing redis:", err)
+		}
 		return nil, fmt.Errorf("initializing gorm: %w", err)
 	}
 
 	// // Mail
 	Mail, err := mail.NewMail(conf)
 	if err != nil {
-		rdb.Close()
-		sqlDB.Client.Close()
+		err2 := rdb.Close()
+		if err2 != nil {
+			log.Println("Closing redis:", err)
+		}
+		err2 = sqlDB.Client.Close()
+		if err2 != nil {
+			log.Println("Closing mysql:", err)
+		}
 
 		return nil, fmt.Errorf("initializing smtp: %w", err)
 	}

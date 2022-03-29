@@ -15,7 +15,7 @@ const (
 	ResetPass  = Task("reset_password")
 )
 
-func EventJSON(task Task, key string) (string, error) {
+func JSON(task Task, key string) (string, error) {
 	data, err := json.Marshal(Event{task, key})
 	if err != nil {
 		return "", err

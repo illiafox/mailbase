@@ -16,7 +16,7 @@ type Reset struct {
 }
 
 func (r *Reset) New(userid int, key string) error {
-	key, err := event.EventJSON(event.ResetPass, key)
+	key, err := event.JSON(event.ResetPass, key)
 	if err != nil {
 		return err
 	}
@@ -24,7 +24,7 @@ func (r *Reset) New(userid int, key string) error {
 }
 
 func (r *Reset) Get(key string) (int, error) {
-	key, err := event.EventJSON(event.ResetPass, key)
+	key, err := event.JSON(event.ResetPass, key)
 	if err != nil {
 		return -1, err
 	}

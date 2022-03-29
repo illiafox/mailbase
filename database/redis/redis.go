@@ -16,7 +16,7 @@ type Redis struct {
 	Verify modules.Verify
 }
 
-func NewRedis(client *redis.Client, conf config.Config) Redis {
+func NewRedis(client *redis.Client, _ config.Config) Redis {
 	expire := time.Duration(public.Redis.ExpireSeconds) * time.Second
 
 	return Redis{

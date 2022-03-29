@@ -21,7 +21,7 @@ func (v *Verify) New(user model.Users, key string) error {
 	if err != nil {
 		return err
 	}
-	key, err = event.EventJSON(event.VerifyUser, key)
+	key, err = event.JSON(event.VerifyUser, key)
 	if err != nil {
 		return err
 	}
@@ -31,7 +31,7 @@ func (v *Verify) New(user model.Users, key string) error {
 func (v *Verify) Get(key string) (model.Users, error) {
 	var user model.Users
 
-	key, err := event.EventJSON(event.VerifyUser, key)
+	key, err := event.JSON(event.VerifyUser, key)
 	if err != nil {
 		return user, public.NewInternalWithError(err)
 	}
