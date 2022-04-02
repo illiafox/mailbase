@@ -3,7 +3,6 @@ package methods
 import (
 	"errors"
 	"fmt"
-	"github.com/illiafox/mailbase/cookie"
 	"github.com/illiafox/mailbase/database"
 	"github.com/illiafox/mailbase/database/mysql/model"
 	"github.com/illiafox/mailbase/shared/public"
@@ -13,55 +12,14 @@ import (
 )
 
 // Admins sets User.Admins to 1 ('grant') OR 0 ('remove') ONLY SUPER ADMIN
-func Admins(db *database.Database, w http.ResponseWriter, r *http.Request) {
+func Admins(db *database.Database, _ *model.Users, w http.ResponseWriter, r *http.Request) {
+
 	if r.Method != http.MethodPost {
-		public.WriteWithCode(w, http.StatusMethodNotAllowed, "Method not allowed! Use POST")
+		templates.Error.WriteAnyCode(w, http.StatusForbidden, fmt.Errorf("method %s not supported, POST only", r.Method))
 		return
 	}
 
-	key, err := cookie.Session.GetClaim(r)
-	if err != nil {
-		if errors.As(err, &public.InternalWithError{}) {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
-			log.Println(fmt.Errorf("ADMIN: admins: cookie: get claim: %w", err))
-		} else {
-			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
-		}
-		return
-	}
-
-	id, err := db.MySQL.Session.Verify(key)
-	if err != nil {
-		if errors.As(err, &public.InternalWithError{}) {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
-			log.Println(fmt.Errorf("ADMIN: admins: mysql: verifysession: %w", err))
-		} else {
-			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
-		}
-		return
-	}
-
-	user, err := db.MySQL.Login.GetUserByID(id)
-	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
-		log.Println(fmt.Errorf("ADMIN: admins: mysql: GetUserByID(%d): %w", id, err))
-		return
-	}
-
-	// Master admin check
-	if user.Level < model.AdminLevel {
-		templates.Error.WriteAnyCode(w, http.StatusForbidden, public.Admin.NoRights)
-		return
-	}
-
-	if user.Level < model.SuperLevel {
-		templates.Error.WriteAnyCode(w, http.StatusForbidden, public.Admin.NotSuper)
-		return
-	}
-
-	// //
-
-	err = r.ParseForm()
+	err := r.ParseForm()
 	if err != nil {
 		templates.Error.WriteAnyCode(w, http.StatusForbidden, fmt.Errorf("form parsing error: %w", err))
 		return

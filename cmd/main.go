@@ -60,16 +60,6 @@ func main() {
 		return
 	}
 
-	//for i := 0; i < 20; i++ {
-	//	db.MySQL.Client.Create(&model.Reports{
-	//		User_id: 1,
-	//		Checked: false,
-	//		Problem: strings.Repeat("abcd", i),
-	//		Time:    model.Time{time.Now().Add(time.Hour * time.Duration(i))},
-	//	})
-	//}
-	//return
-
 	serv := server.Init(db, conf)
 
 	sig := make(chan os.Signal, 1)

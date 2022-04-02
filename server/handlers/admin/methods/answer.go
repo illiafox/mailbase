@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/illiafox/mailbase/cookie"
 	"github.com/illiafox/mailbase/database"
 	"github.com/illiafox/mailbase/database/mysql/model"
 	"github.com/illiafox/mailbase/shared/public"
@@ -16,48 +15,13 @@ import (
 )
 
 // Answer report ('answer') or delete it ('delete')
-func Answer(db *database.Database, w http.ResponseWriter, r *http.Request) {
+func Answer(db *database.Database, user *model.Users, w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		public.WriteWithCode(w, http.StatusMethodNotAllowed, "Method not allowed! Use POST")
+		templates.Error.WriteAnyCode(w, http.StatusForbidden, fmt.Errorf("method %s not supported, POST only", r.Method))
 		return
 	}
 
-	key, err := cookie.Session.GetClaim(r)
-	if err != nil {
-		if errors.As(err, &public.InternalWithError{}) {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
-			log.Println(fmt.Errorf("ADMIN: answer: cookie: get claim: %w", err))
-		} else {
-			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
-		}
-		return
-	}
-
-	id, err := db.MySQL.Session.Verify(key)
-	if err != nil {
-		if errors.As(err, &public.InternalWithError{}) {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
-			log.Println(fmt.Errorf("ADMIN: answer: mysql: verifysession: %w", err))
-		} else {
-			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
-		}
-		return
-	}
-
-	user, err := db.MySQL.Login.GetUserByID(id)
-	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
-		log.Println(fmt.Errorf("ADMIN: answer: mysql: GetUserByID(%d): %w", id, err))
-		return
-	}
-
-	// Master admin check
-	if user.Level < model.AdminLevel {
-		templates.Error.WriteAnyCode(w, http.StatusForbidden, public.Admin.NoRights)
-		return
-	}
-
-	err = r.ParseForm()
+	err := r.ParseForm()
 	if err != nil {
 		templates.Error.WriteAnyCode(w, http.StatusForbidden, fmt.Errorf("form parsing error: %w", err))
 		return
@@ -111,7 +75,7 @@ func Answer(db *database.Database, w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			err = db.MySQL.Reports.Check(reportID, id, answer)
+			err = db.MySQL.Reports.Check(reportID, user.User_id, answer)
 			if err != nil {
 				if errors.As(err, &public.InternalWithError{}) {
 					templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)

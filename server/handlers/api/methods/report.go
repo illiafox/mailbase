@@ -3,7 +3,6 @@ package methods
 import (
 	"errors"
 	"fmt"
-	"github.com/illiafox/mailbase/cookie"
 	"github.com/illiafox/mailbase/database"
 	"github.com/illiafox/mailbase/database/mysql/model"
 	"github.com/illiafox/mailbase/shared/public"
@@ -14,30 +13,9 @@ import (
 )
 
 // Report creates new report
-func Report(db *database.Database, w http.ResponseWriter, r *http.Request) {
-	key, err := cookie.Session.GetClaim(r)
-	if err != nil {
-		if errors.As(err, &public.InternalWithError{}) {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
-			log.Println(fmt.Errorf("SITE: report: cookie: get claim: %w", err))
-		} else {
-			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
-		}
-		return
-	}
+func Report(db *database.Database, user *model.Users, w http.ResponseWriter, r *http.Request) {
 
-	id, err := db.MySQL.Session.Verify(key)
-	if err != nil {
-		if errors.As(err, &public.InternalWithError{}) {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
-			log.Println(fmt.Errorf("SITE: report: mysql: verifysession: %w", err))
-		} else {
-			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
-		}
-		return
-	}
-
-	err = r.ParseForm()
+	err := r.ParseForm()
 	if err != nil {
 		templates.Error.WriteAnyCode(w, http.StatusForbidden, fmt.Errorf("form parsing error: %w", err))
 		return
@@ -58,7 +36,7 @@ func Report(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	problem = strings.TrimSuffix(problem, "\n")
 
 	err = db.MySQL.Reports.New(&model.Reports{
-		User_id: id,
+		User_id: user.User_id,
 		Problem: problem,
 	})
 

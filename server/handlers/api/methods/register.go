@@ -20,7 +20,7 @@ import (
 // Register creates verify event to create account
 func Register(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		public.WriteWithCode(w, http.StatusMethodNotAllowed, "Method not allowed! Use POST")
+		templates.Error.WriteAnyCode(w, http.StatusForbidden, fmt.Errorf("method %s not supported, POST only", r.Method))
 		return
 	}
 

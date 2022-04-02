@@ -2,7 +2,9 @@ package site
 
 import (
 	"github.com/illiafox/mailbase/database"
+	"github.com/illiafox/mailbase/database/mysql/model"
 	"github.com/illiafox/mailbase/server/handlers/site/methods"
+	"github.com/illiafox/mailbase/server/middleware"
 	"net/http"
 )
 
@@ -20,8 +22,10 @@ func Handler(db *database.Database) http.Handler {
 	handler.Handle("/forgot/", StaticHandler)
 	handler.Handle("/report/", StaticHandler)
 
+	middle := middleware.New(db)
+
 	// Main page
-	handler.HandleFunc("/", db.Wrap(methods.Main))
+	handler.HandleFunc("/", middle.ByLevel(model.UserLevel, methods.Main))
 
 	return handler
 }

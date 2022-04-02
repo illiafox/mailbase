@@ -2,7 +2,9 @@ package api
 
 import (
 	"github.com/illiafox/mailbase/database"
+	"github.com/illiafox/mailbase/database/mysql/model"
 	"github.com/illiafox/mailbase/server/handlers/api/methods"
+	"github.com/illiafox/mailbase/server/middleware"
 	"net/http"
 )
 
@@ -29,8 +31,10 @@ func Handler(db *database.Database) http.Handler {
 	// POST: update pass
 	handler.HandleFunc("/reset", db.Wrap(methods.ResetPass))
 
+	middle := middleware.New(db)
+
 	// Send report
-	handler.HandleFunc("/report", db.Wrap(methods.Report))
+	handler.HandleFunc("/report", middle.ByLevel(model.UserLevel, methods.Report))
 
 	return handler
 }

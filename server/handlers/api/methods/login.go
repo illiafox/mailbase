@@ -20,7 +20,7 @@ import (
 // Login verifies your account and creates cookies
 func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		public.WriteWithCode(w, http.StatusMethodNotAllowed, "Method not allowed! Use POST")
+		templates.Error.WriteAnyCode(w, http.StatusForbidden, fmt.Errorf("method %s not supported, POST only", r.Method))
 		return
 	}
 
