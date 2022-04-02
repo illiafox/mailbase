@@ -101,7 +101,7 @@ func Answer(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		case "answer":
 
 			answer := r.FormValue("answer")
-			if action == "" {
+			if answer == "" {
 				templates.Error.WriteAnyCode(w, http.StatusForbidden, "'answer' form field is empty")
 				return
 			}
@@ -135,8 +135,6 @@ func Answer(db *database.Database, w http.ResponseWriter, r *http.Request) {
 				templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 				log.Println(fmt.Errorf("ADMIN: answer: mail: send answer message (%s): %w", user.Email, err))
 			}
-
-			//
 
 			templates.Successful.WriteAny(w, `Report is checked<br>Redirecting back to admin panel..
 			<meta http-equiv="refresh" content="2 url=/admin">`)

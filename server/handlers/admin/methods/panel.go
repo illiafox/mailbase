@@ -13,11 +13,6 @@ import (
 	"net/http"
 )
 
-type panel struct {
-	*model.Users
-	Works bool
-}
-
 func Panel(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	key, err := cookie.Session.GetClaim(r)
 	if err != nil {
@@ -54,8 +49,13 @@ func Panel(db *database.Database, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	templates.Admin.Panel.Tmpl.Execute(w, panel{
+	templates.Admin.Panel.Tmpl.Execute(w, panelJSON{
 		Users: user,
 		Works: maintenance.Works(),
 	})
+}
+
+type panelJSON struct {
+	*model.Users
+	Works bool
 }
