@@ -35,11 +35,13 @@
 <div style="text-align: center;">
     <h1>Welcome back, {{.Email}}</h1>
     <a href="/api/logout" style="font-size: 30px;"><strong>Logout</strong></a>
-    <h3>or</h3>
-    <h2>Fuck it, <a href="/delete">delete account</a></h2>
+
+    <!--    <h3>or</h3>-->
+<!--    <h2>Fuck it, <a href="/delete">delete account</a></h2>-->
 
     {{if gt .Level 0}}
-    <a href="/admin" style="font-size: 30px;">Admin Panel</a>
+    <br>
+    <a href="/admin" style="font-size: 30px;"><strong>Admin Panel</strong></a>
     {{ end }}
 
 </div>

@@ -44,11 +44,11 @@
     <div style="text-align: right">
 
         {{ if .Checked }}
-        <h1>Status: Checked</h1>
+        <h1>Status: <span style="color: lawngreen">Checked</span></h1>
         <h3>Admin: {{ .Admin }} [{{ .Admin_id }}]</h3>
         <h3>Date: {{ .Checked }}</h3>
         {{ else }}
-        <h1>Status: Unchecked</h1>
+        <h1>Status: <span style="color: red">Unchecked</span></h1>
         {{ end }}
 
     </div>
