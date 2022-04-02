@@ -70,7 +70,7 @@ func Answer(db *database.Database, user *model.Users, w http.ResponseWriter, r *
 				return
 			}
 
-			if len(answer) < 100 {
+			if len(answer) < 50 {
 				templates.Error.WriteAnyCode(w, http.StatusForbidden, "Your answer is too short! At least 100 bytes")
 				return
 			}

@@ -46,7 +46,15 @@
         {{ if .Checked }}
         <h1>Status: <span style="color: lawngreen">Checked</span></h1>
         <h3>Admin: {{ .Admin }} [{{ .Admin_id }}]</h3>
-        <h3>Date: {{ .Checked }}</h3>
+        <form method="post" action="/admin/api/check?id={{ .Report_id }}">
+
+        <h3>Date: {{ .Checked }}
+
+                <button name="action" value="delete">Delete</button>
+
+        </h3>
+
+        </form>
         {{ else }}
         <h1>Status: <span style="color: red">Unchecked</span></h1>
         {{ end }}

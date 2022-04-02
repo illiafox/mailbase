@@ -1,2 +1,2 @@
-2022/04/02 20:19:19 Initializing connections
-2022/04/02 20:19:19 Server started [HTTP] at 127.0.0.1:8080
+2022/04/02 20:40:24 Initializing connections
+2022/04/02 20:40:24 Server started [HTTP] at 127.0.0.1:8080
