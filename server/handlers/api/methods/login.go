@@ -17,6 +17,7 @@ import (
 	"net/mail"
 )
 
+// Login verifies your account and creates cookies
 func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		public.WriteWithCode(w, http.StatusMethodNotAllowed, "Method not allowed! Use POST")
@@ -55,7 +56,7 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	exist, err := db.MySQL.Login.MailExist(Mail)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: login: check login exist: %w", err))
 		return
 	}
@@ -75,8 +76,8 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	_, err = cookie.Session.SetClaim(w, r, key)
 	if err != nil {
-		if errors.Is(err, public.ErrorInternal) {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		if errors.As(err, &public.InternalWithError{}) {
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 			log.Println(fmt.Errorf("API: login: cookie: set claim: %w", err))
 		} else {
 			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
@@ -86,7 +87,7 @@ func Login(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	err = db.MySQL.Session.Insert(exist.User_id, key)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: login: insert session: %w", err))
 	} else {
 		templates.Successful.WriteAny(w, "You can visit <a href=\"/\">main page</a> now")

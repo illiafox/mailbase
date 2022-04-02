@@ -2,6 +2,8 @@ package methods
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/illiafox/mailbase/crypt"
@@ -15,7 +17,8 @@ import (
 	"net/mail"
 )
 
-func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
+// Register creates verify event to create account
+func Register(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		public.WriteWithCode(w, http.StatusMethodNotAllowed, "Method not allowed! Use POST")
 		return
@@ -53,7 +56,7 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	exist, err := db.MySQL.Login.MailExist(Mail)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: register: check login exist: %w", err))
 		return
 	}
@@ -63,25 +66,28 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	}
 
 	key := uuid.NewString()
+	hash := sha256.Sum256([]byte(key))
+	key = hex.EncodeToString(hash[:])
 
 	var buf bytes.Buffer
+
 	err = templates.Mail.Verify.WriteBytes(&buf, key)
 	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: register: create message with key: %w", err))
 		return
 	}
 
 	err = db.Mail.SendMessage(Mail, "Your verify link", buf.String())
 	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: register: send mail (%s): %w", Mail, err))
 		return
 	}
 
 	hashedPass, err := crypt.HashPassword(Password)
 	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: register: hash password: %w", err))
 		return
 	}
@@ -92,7 +98,7 @@ func Reg(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	}, key)
 
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: register: new buf: %w", err))
 	} else {
 		templates.Successful.WriteAny(w, "Check your email box :)")

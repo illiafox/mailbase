@@ -1,9 +1,7 @@
 package public
 
-var Redis = redis{
-	ExpireSeconds: 300,
-}
-
-type redis struct {
+var Redis = struct {
 	ExpireSeconds int
+}{
+	ExpireSeconds: 300,
 }

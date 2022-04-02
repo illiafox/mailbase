@@ -11,11 +11,12 @@ import (
 	"net/http"
 )
 
+// Logout deletes your session
 func Logout(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	key, err := cookie.Session.GetClaim(r)
 	if err != nil {
-		if errors.Is(err, public.ErrorInternal) {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		if errors.As(err, &public.InternalWithError{}) {
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 			log.Println(fmt.Errorf("API: logout: cookie: get claim: %w", err))
 		} else {
 			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
@@ -25,7 +26,7 @@ func Logout(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	err = db.MySQL.Session.DeleteByKey(key)
 	if err != nil { // only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: logout: mysql: Delete Session by key (%s): %w", key, err))
 		return
 	}

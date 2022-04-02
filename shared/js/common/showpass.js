@@ -1,8 +1,8 @@
-function  ShowHidePass(id) {
-    let x = document.getElementById(id);
-    if (x.type === "password") {
-        x.type = "text";
+function  ShowHidePass(id,box) {
+    let x = document.getElementById(box);
+    if (x.checked) {
+        document.getElementById(id).type = "text";
     } else {
-        x.type = "password";
+        document.getElementById(id).type = "password";
     }
 }

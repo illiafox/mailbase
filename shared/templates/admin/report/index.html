@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report #{{ .Report_id }}</title>
+
+    <link rel="stylesheet" href="/css/header/style.css">
+
+    <link rel="stylesheet" href="/css/element/links.css">
+
+    <link rel="stylesheet" href="/css/element/button.css">
+
+</head>
+
+<style>
+
+    .tabs {
+        display: flex;
+        justify-content: space-between;
+        /*justify-content: center;*/
+        /*overflow: auto*/
+    }
+
+</style>
+
+<body style="background-color: black; font-family: 'Inconsolata', monospace; color: white; margin-left: 50px;margin-right: 50px;">
+
+<header>
+    <div class="center">
+        <img src="/images/logo.jpg" alt="logo"/>
+        <h1><a href="/">Fort Studio</a></h1>
+        <br>
+    </div>
+</header>
+
+<div class="tabs">
+
+    <div style="text-align: left">
+        <h1>Report #{{ .Report_id }}</h1>
+        <h3>Created: {{ .Created }}</h3>
+        <h3>Sender: {{ .User }} [{{ .User_id }}]</h3>
+    </div>
+
+    <div style="text-align: right">
+
+        {{ if .Checked }}
+        <h1>Status: Checked</h1>
+        <h3>Admin: {{ .Admin }} [{{ .Admin_id }}]</h3>
+        <h3>Date: {{ .Checked }}</h3>
+        {{ else }}
+        <h1>Status: Unchecked</h1>
+        {{ end }}
+
+    </div>
+</div>
+<hr>
+
+<h1 style="text-align: center">Problem</h1>
+
+<h2>{{ nlbr .Problem }}</h2>
+
+{{ if .Checked }}
+<hr>
+<h1 style="text-align: center">Answer</h1>
+
+<h2>{{ nlbr .Answer }}</h2>
+
+{{ else }}
+<form method="post" action="/admin/api/check?id={{ .Report_id }}">
+    <div class="tabs">
+        <button name="action" value="answer">Answer</button>
+        <button name="action" value="delete">Delete</button>
+    </div>
+    <textarea name="answer" rows="400" id="newpost" name="content" style="font-size: 20px;color:white; background-color: black;width:100%; margin-top: 10px" placeholder="Write your answer in good manner (HTML SUPPORTED)"></textarea>
+</form>
+
+{{ end }}
+
+</body>
+</html>

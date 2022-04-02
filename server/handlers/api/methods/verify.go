@@ -10,6 +10,7 @@ import (
 	"net/http"
 )
 
+// Verify verifies
 func Verify(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	key := r.URL.Query().Get("key")
 	if key == "" {
@@ -19,8 +20,8 @@ func Verify(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	user, err := db.Redis.Verify.Get(key)
 	if err != nil {
-		if errors.Is(err, public.ErrorInternal) {
-			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		if errors.As(err, &public.InternalWithError{}) {
+			templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 			log.Println(fmt.Errorf("API: verify: redis: get buf: %w", err))
 		} else {
 			templates.Error.WriteAnyCode(w, http.StatusForbidden, err)
@@ -30,7 +31,7 @@ func Verify(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	exist, err := db.MySQL.Login.MailExist(user.Email)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: verify: check login exist: %w", err))
 		return
 	}
@@ -41,7 +42,7 @@ func Verify(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	err = db.MySQL.Register.NewUser(user)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: verify: mysql: create user: %w", err))
 	} else {
 		templates.Successful.WriteAny(w, "Now you can <a href=\"/login\"> Login</a>")

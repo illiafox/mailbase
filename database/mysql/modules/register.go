@@ -7,13 +7,12 @@ import (
 )
 
 type Register struct {
-	Client *gorm.DB
+	Conn *gorm.DB
 }
 
+// NewUser creates new user in table
 func (db Register) NewUser(user model.Users) error {
-	err := db.Client.Create(&user).Error
-	if err != nil {
-		return public.NewInternalWithError(err)
-	}
-	return nil
+	return public.NewInternalWithError(
+		db.Conn.Create(&user).Error,
+	)
 }

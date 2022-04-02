@@ -8,14 +8,14 @@ import (
 )
 
 type Reset struct {
-	Client *gorm.DB
+	Conn *gorm.DB
 }
 
 // UpdatePass sets new password for user id
 func (db Reset) UpdatePass(id int, pass string) error {
 	var user model.Users
 
-	err := db.Client.First(&user, "user_id = ?", id).Error
+	err := db.Conn.First(&user, "user_id = ?", id).Error
 	if err != nil {
 		if gorm.IsRecordNotFoundError(err) {
 			return public.Login.MailNotFound
@@ -27,5 +27,7 @@ func (db Reset) UpdatePass(id int, pass string) error {
 		return public.Forgot.SamePassword
 	}
 
-	return db.Client.Model(&user).Update("password", pass).Error
+	return public.NewInternalWithError(
+		db.Conn.Model(&user).Update("password", pass).Error,
+	)
 }

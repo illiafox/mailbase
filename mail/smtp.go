@@ -11,6 +11,7 @@ type Mail struct {
 
 func (m Mail) SendMessage(to, subject string, body string) error {
 	msg := gomail.NewMessage()
+
 	msg.SetHeader("From", m.From)
 	msg.SetHeader("To", to)
 	msg.SetHeader("Subject", subject)

@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="/css/element/links.css">
 
+    <link rel="stylesheet" href="/css/element/button.css">
 </head>
 
 <style>
@@ -56,26 +57,6 @@
         background-color: rgb(228, 228, 228);
     }
 
-    button {
-        box-sizing: border-box;
-        color: #222222;
-        cursor: pointer;
-        display: inline-block;
-        font-size: 16px;
-        line-height: 20px;
-        margin: 0;
-        padding: 13px 23px;
-        position: relative;
-        text-align: center;
-        touch-action: manipulation;
-        width: auto;
-        transition-timing-function: ease-in-out;
-    }
-
-    button:hover {
-        color: green;
-        transition: all .3s;
-    }
 
 
     @media screen and (max-width: 500px) {
@@ -122,7 +103,7 @@
         <p><strong>Remembered?</strong> <a href="/login"> Login</a></p>
     </form>
     <div class="button">
-        <input type="checkbox" onclick="ShowHidePass(`pass_input`)" style="margin-top: 10px; "> Show
+        <input type="checkbox" id="show" onclick="ShowHidePass('pass_input','show')" style="margin-top: 10px; "> Show
         <button onclick="postForm('resetform')" class="button" value="Reset Password">Reset
         </button>
     </div>

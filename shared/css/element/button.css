@@ -1,0 +1,15 @@
+button {
+    cursor: pointer;
+    font-size: 16px;
+    touch-action: manipulation;
+    background: black;
+    color: white;
+    font-family: 'Inconsolata', monospace;
+    border: 2px solid white;
+    padding: 13px 30px;
+    font-weight: bold;
+    transition: 500ms;
+}
+button:hover{
+    transform: scale(1.1);
+}

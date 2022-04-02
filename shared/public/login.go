@@ -2,14 +2,12 @@ package public
 
 import "errors"
 
-var Login = login{
-	MailExist:         errors.New("email Already Exists"),
-	MailNotFound:      errors.New("mail Not Found"),
-	IncorrectPassword: errors.New("incorrect password"),
-}
-
-type login struct {
+var Login = struct {
 	MailExist         error
 	MailNotFound      error
 	IncorrectPassword error
+}{
+	MailExist:         errors.New("email Already Exists"),
+	MailNotFound:      errors.New("mail Not Found"),
+	IncorrectPassword: errors.New("incorrect password"),
 }

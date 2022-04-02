@@ -7,13 +7,13 @@ import (
 )
 
 type Login struct {
-	Client *gorm.DB
+	Conn *gorm.DB
 }
 
-// MailExist returns nil error if mail exists
+// MailExist returns user struct or nil if not exists
 func (db Login) MailExist(email string) (*model.Users, error) {
 	var user model.Users
-	err := db.Client.First(&user, "email = ?", email).Error
+	err := db.Conn.First(&user, "email = ?", email).Error
 	if err != nil {
 		if gorm.IsRecordNotFoundError(err) {
 			return nil, nil
@@ -23,11 +23,11 @@ func (db Login) MailExist(email string) (*model.Users, error) {
 	return &user, nil
 }
 
+// GetUserByID returns user struct by id
 func (db Login) GetUserByID(id int) (*model.Users, error) {
 	var user model.Users
-	err := db.Client.First(&user, "user_id = ?", id).Error
-	if err != nil {
-		return nil, public.NewInternalWithError(err)
-	}
-	return &user, nil
+
+	return &user, public.NewInternalWithError(
+		db.Conn.First(&user, "user_id = ?", id).Error,
+	)
 }

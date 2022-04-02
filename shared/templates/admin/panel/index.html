@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/header/style.css">
+
+    <link rel="stylesheet" href="/css/element/links.css">
+
+    <link rel="stylesheet" href="/css/element/button.css">
+
+    <meta charset="UTF-8">
+    <title>Admin panel</title>
+</head>
+
+<style>
+    footer {
+        bottom: 0;
+        height: 2em;
+        left: 0;
+        /*position: fixed; !* OldProperty *!*/
+        position: static; /* Updated Property */
+        font-size: small;
+        width: 100%;
+    }
+
+    @media (max-width: 800px) {
+        .flex-container {
+            flex-direction: column;
+        }
+    }
+
+
+    .input {
+        display: inline-block;
+        padding: 10px 15px;
+        font-size: 20px;
+        border: 1px solid transparent;
+        background-color: rgb(228, 228, 228);
+    }
+
+    table {
+        border-collapse: collapse;
+        font-size: 16px;
+        transition: 500ms;
+        margin: 10px
+    }
+
+    table:hover {
+        transform: scale(1.1);
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    .tabs {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /*overflow: auto*/
+    }
+</style>
+
+<body style="background-color: black; font-family: 'Inconsolata', monospace; color: white; margin: 20px;">
+<header>
+    <div class="center">
+        <img src="/images/logo.jpg" alt="logo"/>
+        <h1><a href="/">Fort Studio</a></h1>
+        <br>
+    </div>
+</header>
+
+<div style="text-align: center">
+    <h1>Admin panel</h1>
+
+    <div class="tabs">
+        <h2>Reports</h2>
+        (<input type="checkbox" id="checked" onclick="GetReports(-offset)">
+        <h3>Checked</h3>)
+    </div>
+
+
+    <div class="tabs" style="font-family: 'Inconsolata', monospace;">
+        <button id="back" onclick="GetReports(-limit)" style="margin-right: 30px; display: none"> <</button>
+
+        <div class="tabs" id="tables"></div>
+
+        <button id="next" onclick="GetReports(limit)" style="margin-left: 30px; display: none"> ></button>
+    </div>
+
+    {{if eq .Level 2}}
+    <div style=";color:white;   font-family: 'Inconsolata', monospace;">
+        <h2>Permission control</h2>
+
+        <form method="post" action="/admin/level">
+            <input type="text" name="identifier" placeholder="ID or Mail" class="input" required>
+            <button name="action" value="grant" type="submit" class="button"
+                    style="margin-top: 5px; margin-left: 5px; margin-right: 5px">Grand Admin
+            </button>
+            <button name="action" value="remove" type="submit" class="button" style="margin-top: 5px;">Remove
+                Admin
+            </button>
+        </form>
+
+        <h2>Maintenance</h2>
+
+        {{if .Works}}
+        <form method="post" action="/admin/maintenance">
+            <input type="text" name="details" placeholder="Time or Details (HTML supported)" class="input" required>
+            <button name="state" value="limit" type="submit" class="button" style="margin-top: 5px; margin-left: 5px;">
+                Down server
+            </button>
+            <h5>admin page will be available</h5>
+        </form>
+        {{else}}
+        <form method="post" action="/admin/maintenance">
+            <button name="state" value="on" type="submit" class="button" style="margin-top: 5px;">Uncover server
+            </button>
+            <h5>make sure that all bugs are fixed</h5>
+        </form>
+        {{end}}
+
+    </div>
+    {{end}}
+</div>
+</body>
+
+<script>
+    const limit = 5
+    let offset = 0
+
+    function GetReports(add) {
+        let checked = document.getElementById("checked").checked
+
+        offset += add
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            console.log(this.responseText)
+            obj = JSON.parse(this.responseText);
+
+            if (obj.ok) {
+                let output = obj.reports.map(r => `
+                <a target="_blank" href="/admin/report?id=${r.Report_id}" style="color:white">
+                    <table>
+                        <tr>
+                            <td>
+                                ${r.Email} [${r.User_id}]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ${r.Created} [${r.Report_id}]
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                ${(r.Problem.slice(0, 17)) + (r.Problem.length > 17 ? "..." : "")}
+                            </td>
+                        </tr>
+                    </table>
+                </a>`).join('')
+
+                document.getElementById("back").style.display = offset === 0 ? "none" : "block";
+                document.getElementById("next").style.display = obj.reports.length < limit ? "none" : "block";
+                document.getElementById("tables").innerHTML = output;
+            } else {
+                console.log(obj.error)
+                if (offset === 0) {
+                    document.getElementById("back").style.display = "none";
+                    document.getElementById("next").style.display = "none";
+                    offset = 0;
+                    document.getElementById("tables").innerHTML = `
+                        <h1>No Reports</h1>
+                        <button style="margin-left: 20px" onclick="GetReports(0)">Update</button>`;
+                } else {
+                    document.getElementById("next").style.display = "none";
+                    offset -= limit
+                }
+            }
+        }
+        xhttp.open("GET", `/admin/api/reports?offset=${offset}&limit=${limit}` + (checked ? "&checked=true" : ""));
+        xhttp.send();
+    }
+
+    GetReports(0);
+</script>
+
+
+</html>

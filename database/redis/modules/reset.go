@@ -15,14 +15,20 @@ type Reset struct {
 	Expire time.Duration
 }
 
+// New reset password event
+// key: hash key
 func (r *Reset) New(userid int, key string) error {
 	key, err := event.JSON(event.ResetPass, key)
 	if err != nil {
 		return err
 	}
-	return r.Client.SetEX(context.Background(), key, userid, r.Expire).Err()
+	return public.NewInternalWithError(
+		r.Client.SetEX(context.Background(), key, userid, r.Expire).Err(),
+	)
 }
 
+// Get returns user id
+// key: hash key
 func (r *Reset) Get(key string) (int, error) {
 	key, err := event.JSON(event.ResetPass, key)
 	if err != nil {

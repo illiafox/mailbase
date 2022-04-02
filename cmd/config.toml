@@ -9,7 +9,7 @@ Protocol = "tcp"
 [Redis]
 Addr = "localhost:6379"
 Pass = "lJKFQZGTmNQ1OSdXgJhfe/JMpuCXYgB"
-DB = 0
+Conn = 0
 ExpireSeconds = 300
 
 [Host]

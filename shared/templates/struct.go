@@ -16,6 +16,14 @@ func CompileTemplate(filepath ...string) *ExecTemplate {
 	return &ExecTemplate{Tmpl: t}
 }
 
+func CompileTemplateFuncs(m template.FuncMap, filepath ...string) *ExecTemplate {
+	t, err := template.New("index.html").Funcs(m).ParseFiles(filepath...)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return &ExecTemplate{Tmpl: t}
+}
+
 type ExecTemplate struct {
 	Tmpl *template.Template
 }

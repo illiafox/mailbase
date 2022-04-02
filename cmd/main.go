@@ -15,6 +15,7 @@ import (
 	"syscall"
 )
 
+//nolint:funlen
 func main() {
 	defer debug.FreeOSMemory()
 
@@ -31,7 +32,10 @@ func main() {
 
 	format := config.TOML
 
-	flag.Func("format", fmt.Sprintf("config format, default 'json' (available: %s)\nEx: -format yaml", config.Available), config.FlagString(&format))
+	flag.Func("format",
+		fmt.Sprintf("config format, default 'json' (available: %s)\nEx: -format yaml", config.Available),
+		config.FlagString(&format),
+	)
 
 	flag.Parse()
 
@@ -55,6 +59,16 @@ func main() {
 		log.Println("Clearing sessions:", err)
 		return
 	}
+
+	//for i := 0; i < 20; i++ {
+	//	db.MySQL.Client.Create(&model.Reports{
+	//		User_id: 1,
+	//		Checked: false,
+	//		Problem: strings.Repeat("abcd", i),
+	//		Time:    model.Time{time.Now().Add(time.Hour * time.Duration(i))},
+	//	})
+	//}
+	//return
 
 	serv := server.Init(db, conf)
 

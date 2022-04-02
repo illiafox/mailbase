@@ -12,6 +12,18 @@
     <title>Main Page</title>
 </head>
 
+<style>
+    footer {
+        bottom: 0;
+        height: 2em;
+        left: 0;
+        /*position: fixed; !* OldProperty *!*/
+        position: static; /* Updated Property */
+        font-size: small;
+        width: 100%;
+    }
+</style>
+
 <body style="background-color: black; font-family: 'Inconsolata', monospace; color: white; margin: 20px">
 <header>
     <div class="center">
@@ -21,8 +33,17 @@
     </div>
 </header>
 <div style="text-align: center;">
-    <h1>Welcome back, <i>{{.Email}}</i></h1>
-    <a href="/api/logout" style="font-size: 20px">Logout</a>
+    <h1>Welcome back, {{.Email}}</h1>
+    <a href="/api/logout" style="font-size: 30px;"><strong>Logout</strong></a>
+    <h3>or</h3>
+    <h2>Fuck it, <a href="/delete">delete account</a></h2>
+
+    {{if gt .Level 0}}
+    <a href="/admin" style="font-size: 30px;">Admin Panel</a>
+    {{ end }}
+
 </div>
+
+
 </body>
 </html>

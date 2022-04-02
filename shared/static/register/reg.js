@@ -3,6 +3,7 @@ function postForm(id) {
     document.getElementById("check_password").style.display = "none";
     document.getElementById("check_retype").style.display = "none";
     document.getElementById("check_mail").style.display = "none";
+    document.getElementById("check_box").style.display = "none";
     switch (true) {
         // Mail
         case !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(form.elements["mail"].value):
@@ -19,6 +20,12 @@ function postForm(id) {
             document.getElementById("check_retype").innerHTML = "Fields don't match";
             document.getElementById("check_retype").style.display = "block";
             return;
+
+        case (!document.getElementById("box").checked):
+            document.getElementById("check_box").innerHTML = "Please accept";
+            document.getElementById("check_box").style.display = "block";
+            return;
+
         default:
             form.submit()
             break;

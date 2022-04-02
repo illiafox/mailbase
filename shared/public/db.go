@@ -15,10 +15,13 @@ func (int InternalWithError) Error() string {
 	return int.InternalError.Error()
 }
 
-var ErrorInternal = errors.New("internal service error, try again later")
+var Internal = InternalWithError{errors.New("internal service error, try again later")}
 
-func NewInternalWithError(err error) InternalWithError {
-	return InternalWithError{err}
+func NewInternalWithError(err error) error {
+	if err != nil {
+		return InternalWithError{err}
+	}
+	return nil
 }
 
 func WriteWithCode(w http.ResponseWriter, statusCode int, elements ...any) (int, error) {

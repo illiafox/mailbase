@@ -2,6 +2,8 @@ package methods
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/illiafox/mailbase/database"
@@ -12,6 +14,7 @@ import (
 	"net/mail"
 )
 
+// Forgot sends mail message to reset password
 func Forgot(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		public.WriteWithCode(w, http.StatusMethodNotAllowed, "Method not allowed! Use POST")
@@ -39,7 +42,7 @@ func Forgot(db *database.Database, w http.ResponseWriter, r *http.Request) {
 
 	exist, err := db.MySQL.Login.MailExist(Mail)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: forgot: check login exist: %w", err))
 		return
 	}
@@ -49,25 +52,27 @@ func Forgot(db *database.Database, w http.ResponseWriter, r *http.Request) {
 	}
 
 	key := uuid.NewString()
+	hash := sha256.Sum256([]byte(key))
+	key = hex.EncodeToString(hash[:])
 
 	var buf bytes.Buffer
 	err = templates.Mail.ResetPass.WriteBytes(&buf, key)
 	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: forgot: create message with key: %w", err))
 		return
 	}
 
 	err = db.Mail.SendMessage(Mail, "Your verify link", buf.String())
 	if err != nil {
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: forgot: send mail (%s): %w", Mail, err))
 		return
 	}
 
 	err = db.Redis.Forgot.New(exist.User_id, key)
 	if err != nil { // can be only internal
-		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.ErrorInternal)
+		templates.Error.WriteAnyCode(w, http.StatusInternalServerError, public.Internal)
 		log.Println(fmt.Errorf("API: register: new buf: %w", err))
 	} else {
 		templates.Successful.WriteAny(w, "Check your email box :)")

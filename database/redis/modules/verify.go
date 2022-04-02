@@ -16,6 +16,9 @@ type Verify struct {
 	Expire time.Duration
 }
 
+// New creates verify user event
+// user: user struct with password, mail...
+// key: hash key
 func (v *Verify) New(user model.Users, key string) error {
 	data, err := json.Marshal(user)
 	if err != nil {
@@ -25,9 +28,10 @@ func (v *Verify) New(user model.Users, key string) error {
 	if err != nil {
 		return err
 	}
-	return v.Client.SetEX(context.Background(), key, data, v.Expire).Err()
+	return public.NewInternalWithError(
+		v.Client.SetEX(context.Background(), key, data, v.Expire).Err(),
+	)
 }
-
 func (v *Verify) Get(key string) (model.Users, error) {
 	var user model.Users
 

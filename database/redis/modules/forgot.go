@@ -15,14 +15,20 @@ type Forgot struct {
 	Expire time.Duration
 }
 
-func (f *Forgot) New(userid int, key string) error {
+// New forgot password event
+// key: hash key
+func (f *Forgot) New(userID int, key string) error {
 	key, err := event.JSON(event.ForgotPass, key)
 	if err != nil {
 		return err
 	}
-	return f.Client.SetEX(context.Background(), key, userid, f.Expire).Err()
+	return public.NewInternalWithError(
+		f.Client.SetEX(context.Background(), key, userID, f.Expire).Err(),
+	)
 }
 
+// Get returns user id
+// key: hash key
 func (f *Forgot) Get(key string) (int, error) {
 	key, err := event.JSON(event.ForgotPass, key)
 	if err != nil {

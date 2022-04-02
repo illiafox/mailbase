@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Write Report</title>
+
+    <link rel="stylesheet" href="/css/header/style.css">
+
+    <link rel="stylesheet" href="/css/element/links.css">
+
+    <link rel="stylesheet" href="/css/element/button.css">
+
+</head>
+
+<style>
+
+    .tabs {
+        display: flex;
+        justify-content: space-between;
+        /*justify-content: center;*/
+        /*overflow: auto*/
+    }
+
+</style>
+
+<body style="background-color: black; font-family: 'Inconsolata', monospace; color: white; margin-left: 50px;margin-right: 50px;">
+
+
+<header>
+    <div class="center">
+        <img src="/images/logo.jpg" alt="logo"/>
+        <h1><a href="/">Fort Studio</a></h1>
+        <br>
+    </div>
+</header>
+
+<div style="text-align: center">
+
+    <form method="post" action="/api/report">
+        <div class="tabs">
+            <h1>New Report</h1>
+            <button style="width: 15%; height: 90%; font-size: 30px" type="submit">Send</button>
+        </div>
+        <textarea name="problem" rows="400" id="newpost" name="content" style="font-size: 20px;color:white; background-color: black;width:100%; margin-top: 10px" placeholder="Describe your problem as Informative as you can (HTML SUPPORTED)"></textarea>
+    </form>
+
+</div>
+
+</body>
+</html>
