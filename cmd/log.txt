@@ -1,2 +1,4 @@
-2022/04/02 10:12:17 Initializing connections
-2022/04/02 10:12:17 Server started [HTTPS] at 127.0.0.1:8080
+2022/04/02 12:38:25 Initializing connections
+2022/04/02 12:38:26 Server started [HTTPS] at 127.0.0.1:8080
+2022/04/02 12:38:37 http: TLS handshake error from [::1]:37518: remote error: tls: unknown certificate
+2022/04/02 12:38:37 http: TLS handshake error from [::1]:37520: remote error: tls: unknown certificate

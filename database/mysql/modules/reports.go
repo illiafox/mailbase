@@ -13,7 +13,7 @@ type Reports struct {
 
 // New creates report from struct
 func (db Reports) New(report *model.Reports) error {
-	err := db.Conn.First(&model.Reports{}, "checked = false AND user_id = ?", report.User_id).Error
+	err := db.Conn.First(report, "checked = false AND user_id = ?", report.User_id).Error
 	if err != nil {
 		if !gorm.IsRecordNotFoundError(err) {
 			return public.NewInternalWithError(err)
@@ -21,9 +21,8 @@ func (db Reports) New(report *model.Reports) error {
 	} else {
 		return public.Reports.StillProcessing
 	}
-
 	return public.NewInternalWithError(
-		db.Conn.Create(report).Error,
+		db.Conn.Omit("checked_at").Create(report).Error,
 	)
 }
 
