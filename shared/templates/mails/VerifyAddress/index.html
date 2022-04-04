@@ -5,19 +5,12 @@
     <title>Verify</title>
 </head>
 
-<style>
-    a:link {
-        color: green;
-    }
-
-</style>
-
 <body style="background-color: black; font-family: 'Inconsolata', monospace; color: white; font-size: 60%; margin: 20px;  line-height: 30px">
 <div style="margin: 20px;">
     <!--  tweak to escape Google mail coloring  -->
-    <h1 style="color: white;">To verify your account, just open this <a style="text-decoration: none; color: white "
+    <h1 style="color: white;">To verify your account, just open this <a style="color: dodgerblue; text-decoration: none; "
                                                    href="https://localhost:8080/api/verify?key={{.}}">link</a></h1>
-    <h3 style="color: white;">Or click: https://localhost:8080/api/verify?key={{.}}</h3>
+    <h3 style="color: white;">Or click:<span style="color: dodgerblue;"> https://localhost:8080/api/verify?key={{.}}</span></h3>
 
     <h2 style="color: white;">Hurry up: you have only <u>five</u> minutes until key expires<br>© Fort Studio 2022</h2>
 </div>

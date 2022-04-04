@@ -5,20 +5,13 @@
     <title>Reset</title>
 </head>
 
-<style>
-    a:link {
-        color: green;
-    }
-
-</style>
-
 <body style="background-color: black; font-family: 'Inconsolata', monospace; color: white; font-size: 60%; margin: 20px;  line-height: 30px">
 <div style="margin: 20px;">
     <!--  tweak to escape Google mail coloring  -->
-    <h1 style="color: white;">To set new password, just open this <a style="text-decoration: none;"
+    <h1 style="color: white;">To set new password, just open this <a style="color: dodgerblue;text-decoration: none;"
                                                    href="https://localhost:8080/api/reset?key={{.}}">link</a></h1>
     <h2 style="color: white;">Hurry up: you have only <u>five</u> minutes until key expires<br>© Fort Studio 2022</h2>
-<h3 style="color: white;">Or click: http://localhost:8080/api/reset?key={{.}}</h3>
+<h3 style="color: white;">Or click: <span style="color: dodgerblue;">http://localhost:8080/api/reset?key={{.}}</span></h3>
 
 </div>
 </body>
