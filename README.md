@@ -78,6 +78,13 @@ Session not found -> register/login
 
 ---
 
+You must verify your mail:
+
+![Screenshot from 2022-04-11 15-48-47](https://user-images.githubusercontent.com/61962654/162742901-7296d024-ec36-48ae-b1b1-54494e96b0c0.png)
+
+---
+
+
 Forgot password? Wait for mail
 
 ![Screenshot from 2022-04-11 15-07-15](https://user-images.githubusercontent.com/61962654/162739755-7263ec9e-1af1-4825-ad4e-47753782ccec.png)
@@ -109,7 +116,6 @@ Let's write report `HTML SUPPORTED`
 
 ![Screenshot from 2022-04-11 15-11-51](https://user-images.githubusercontent.com/61962654/162740218-71f35ba8-1cac-4bed-a6c3-9bac498f1bff.png)
 
-![Screenshot from 2022-04-11 15-11-51](https://user-images.githubusercontent.com/61962654/162740346-c77e3cfe-58cb-49d8-b308-6fde5cb438d3.png)
 
 ---
 
