@@ -9,7 +9,7 @@
 
 ## login/register/logout/delete server with mail checking using go, redis and mysql
 
-# [Images (must-view) ⬇️](https://github.com/illiafox/mailbase/edit/master/README.md#images)
+# [Images (must-view) ⬇️](https://github.com/illiafox/mailbase#images)
 
 
 # Requirements
